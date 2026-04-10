@@ -1,0 +1,106 @@
+---
+title: "Normas ISO aplicadas en CALAIRE-EA"
+description: "Descripción del rol de ISO 17043:2023, ISO 13528:2017 y NTC ISO/IEC 17025:2017 en el diseño del servicio de ensayos de aptitud para gases contaminantes criterio."
+---
+
+El servicio de Ensayos de Aptitud (EA) de CALAIRE-EA se sustenta en tres normas internacionales que operan de forma complementaria. ISO/IEC 17043:2023 establece los requisitos que debe cumplir el proveedor del programa; ISO 13528:2017 rige los métodos estadísticos para el tratamiento de resultados; y NTC ISO/IEC 17025:2017 fundamenta la competencia técnica del laboratorio CALAIRE como organizador y constituye la referencia de calidad mínima para los laboratorios participantes. Esta página describe el alcance de cada norma y cómo se articula con los componentes del proyecto.
+
+## Marco normativo integrado
+
+Las tres normas no actúan de forma aislada. ISO 17043 define qué debe hacer el proveedor de EA; ISO 13528 especifica cómo deben procesarse estadísticamente los resultados; e ISO 17025 garantiza que el laboratorio que genera el valor de referencia opera con competencia técnica verificable. En conjunto, forman el eje normativo del SGC de CALAIRE-EA.
+
+## Descripción por norma
+
+<AccordionGroup>
+  <Accordion title="ISO/IEC 17043:2023 — Requisitos generales para ensayos de aptitud">
+    **Nombre completo:** Conformity assessment — General requirements for proficiency testing
+
+    **Alcance y aplicabilidad**
+
+    Define los requisitos que deben cumplir los proveedores de programas de ensayos de aptitud (EA), incluyendo el diseño del esquema, la preparación de ítems de ensayo, la gestión de datos de participantes, el reporte de resultados y el tratamiento de la confidencialidad y los conflictos de interés. Aplica a cualquier organización que provea EA en sectores metrológicos, analíticos o de medición.
+
+    **Rol en CALAIRE-EA**
+
+    Es la norma central que estructura el programa de EA para gases contaminantes criterio. Bajo esta norma, el laboratorio CALAIRE actúa como único organizador y responsable integral del ejercicio. Los requisitos de la norma guían:
+    - La definición de roles y responsabilidades del equipo CALAIRE (Coordinador, Estadístico, Profesional de Calidad, Ingeniero Operativo).
+    - La política de conflicto de intereses que impide que el personal operativo del EA participe simultáneamente como laboratorio evaluado.
+    - El protocolo de comunicación con participantes, incluyendo el uso de códigos de laboratorio para garantizar la confidencialidad.
+    - El ciclo completo del EA: anuncio, expresión de interés, selección de participantes, ejecución, reporte de borrador, recepción de comentarios y emisión del informe final.
+
+    **Componentes del proyecto que la referencian**
+
+    | Componente | Uso |
+    |---|---|
+    | P-PSEA-01 Protocolo General EA | Marco normativo principal |
+    | Protocolos por gas (CO, NOx, SO2, O3) | Requisitos específicos por contaminante |
+    | Plan de Gestión de Calidad (artefacto PMI 08) | Cumplimiento de requisitos del proveedor |
+    | CALAIRE-APP | Generación de informes conforme a requisitos del esquema |
+  </Accordion>
+
+  <Accordion title="ISO 13528:2017 — Métodos estadísticos para ensayos de aptitud">
+    **Nombre completo:** Statistical methods for use in proficiency testing by interlaboratory comparisons
+
+    **Alcance y aplicabilidad**
+
+    Especifica los métodos estadísticos para diseñar y analizar esquemas de comparaciones interlaboratorios utilizados como EA. Cubre la determinación del valor asignado, el cálculo de la desviación estándar para evaluación de competencia (σpt), la identificación de valores atípicos y la evaluación del desempeño mediante puntuaciones z, z′, ζ (zeta) y En.
+
+    **Rol en CALAIRE-EA**
+
+    Es la norma que implementa el aplicativo estadístico CALAIRE-APP. Todos los módulos de cálculo del aplicativo están construidos a partir de los algoritmos de esta norma:
+
+    - **Algoritmo A** (Anexo C): método principal para estimar el valor asignado (xpt) y la dispersión robusta (σpt) mediante winsorización iterativa.
+    - **MADe y nIQR**: alternativas robustas cuando la distribución o el tamaño de muestra limitan el Algoritmo A.
+    - **Criterios de homogeneidad y estabilidad** (Anexo B): umbrales cuantitativos que el ítem de ensayo debe superar antes de iniciar el EA (ss ≤ 0.3σpt para homogeneidad).
+    - **Puntuaciones de desempeño**: z = (xi − xpt)/σpt para incertidumbre despreciable del valor asignado; z′ cuando u(xpt) > 0.3σpt; ζ (zeta) cuando se consideran incertidumbres declaradas por el participante; En para evaluación metrológica con incertidumbres reportadas.
+    - **Validación del valor asignado** (§7.8): comparación con valor de referencia independiente para verificar compatibilidad metrológica.
+
+    Para gases como SO2, CO, O3, NO y NO2, σpt se calcula mediante interpolación lineal basada en el valor asignado (Xref), usando parámetros a (pendiente) y b (ordenada al origen) acordados por laboratorios de referencia.
+
+    **Componentes del proyecto que la referencian**
+
+    | Componente | Uso |
+    |---|---|
+    | CALAIRE-APP (paquete `ptcalc`) | Implementación directa de Algoritmo A, MADe, nIQR, z, z′, ζ, En |
+    | P-PSEA-01 Protocolo General EA | Marco estadístico del programa |
+    | Protocolos por gas (CO, NOx, SO2, O3) | Criterios estadísticos por contaminante |
+    | Informes de ronda | Reporte de puntuaciones conforme a la norma |
+  </Accordion>
+
+  <Accordion title="NTC ISO/IEC 17025:2017 — Competencia de laboratorios de ensayo y calibración">
+    **Nombre completo:** General requirements for the competence of testing and calibration laboratories (versión NTC colombiana)
+
+    **Alcance y aplicabilidad**
+
+    Establece los requisitos generales de competencia técnica y de gestión que deben cumplir los laboratorios de ensayo y calibración. Es la norma base de acreditación de laboratorios ante los organismos nacionales de acreditación, y define los requisitos para la validez de los resultados de medición.
+
+    **Rol en CALAIRE-EA**
+
+    Opera en dos dimensiones dentro del proyecto:
+
+    1. **Base del laboratorio CALAIRE como organizador**: La competencia técnica de CALAIRE para generar el valor de referencia (ítems de ensayo a partir de materiales certificados de referencia y fotómetros nivel 2 para O3) se sustenta en los requisitos de esta norma. La designación de CALAIRE como Instituto Designado para Ozono (Resolución 263/2023) está ligada a esta competencia acreditada.
+
+    2. **Referencia para participantes**: Los laboratorios invitados a participar en las rondas de EA son, en su mayoría, sistemas de vigilancia de calidad del aire que operan bajo marcos de calidad compatibles con ISO 17025. El SGC de CALAIRE-EA considera estos requisitos al establecer los criterios de selección de participantes y la evaluación de la información de incertidumbre que reportan.
+
+    **Componentes del proyecto que la referencian**
+
+    | Componente | Uso |
+    |---|---|
+    | Laboratorio CALAIRE | Norma base de competencia técnica y metrológica |
+    | P-PSEA-01 Protocolo General EA | Criterios de selección de participantes |
+    | Protocolos por gas | Requisitos de calibración y trazabilidad metrológica |
+    | SGC general | Gestión de la imparcialidad y competencia del organizador |
+  </Accordion>
+</AccordionGroup>
+
+## Interrelación entre las normas
+
+Las tres normas forman una cadena de calidad coherente. ISO 17043 es el marco de nivel superior: define qué debe proveer el programa. ISO 13528 opera dentro de ISO 17043 como la referencia metodológica para el componente estadístico, implementado en CALAIRE-APP. ISO 17025 actúa como el sustento de la competencia técnica que valida tanto al organizador como al conjunto de prácticas exigidas a los participantes.
+
+```
+ISO 17043:2023
+  └── Diseño del programa EA
+        ├── ISO 13528:2017 → Métodos estadísticos (CALAIRE-APP)
+        └── ISO 17025:2017 → Competencia técnica (CALAIRE + participantes)
+```
+
+Para el estado de los documentos del SGC y las auditorías pendientes, consulte [Sistema de Gestión de Calidad — visión general](/qms/overview).

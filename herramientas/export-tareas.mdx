@@ -1,0 +1,156 @@
+---
+title: "Exportar tareas de Logseq CALAIRE-EA a CSV"
+description: "Script Python que extrae bloques TODO/DOING/DONE del grafo Logseq y genera CSV ordenado por deadline con columnas de prioridad, proyecto, fuente y estado."
+---
+
+El script `export_tareas.py` recorre los archivos Markdown en `pages/` y `journals/`, detecta todos los bloques de tarea en formato Logseq y produce un archivo CSV listo para importar a Google Sheets u otras herramientas de seguimiento. Esta página explica los requisitos, las opciones de línea de comandos, el formato de salida y la lógica de detección de tareas.
+
+## Requisitos
+
+El script usa únicamente la biblioteca estándar de Python 3. No se necesita instalar dependencias con `pip`.
+
+| Módulo | Propósito |
+|--------|-----------|
+| `re` | Expresiones regulares para detectar bloques y propiedades |
+| `pathlib` | Manejo de rutas multiplataforma |
+| `argparse` | Argumentos de línea de comandos |
+| `datetime` | Cálculos y ordenamiento por fecha |
+
+<Info>
+  Python 3.6 o superior es suficiente. No se requiere entorno virtual.
+</Info>
+
+## Uso
+
+<Steps>
+  <Step title="Ubícate en la raíz del grafo">
+    El script usa su propia ubicación (`tools/`) para resolver rutas relativas. Ejecuta los comandos desde la raíz del repositorio del grafo.
+  </Step>
+  <Step title="Ejecuta el exportador">
+    Elige la variante según tus necesidades:
+
+    <CodeGroup>
+
+    ```bash Exportación por defecto
+    python tools/export_tareas.py
+    ```
+
+    ```bash Archivo de salida personalizado
+    python tools/export_tareas.py --output mis_tareas.csv
+    ```
+
+    ```bash Directorios personalizados
+    python tools/export_tareas.py --pages pages/ --journals journals/
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Revisa el resumen en consola">
+    Al terminar, el script imprime cuántos archivos procesó, el total de tareas encontradas y un desglose por estado:
+
+    ```text
+    Buscando tareas en 42 archivos...
+      ✓ pages/CALAIRE-APP.md: 5 tareas
+      ✓ journals/2026_01_15.md: 3 tareas
+
+    Total de tareas encontradas: 28
+
+    Resumen:
+      Con deadline: 13
+      TODO: 10
+      DOING: 3
+      DONE: 15
+    ```
+  </Step>
+  <Step title="Importa el CSV a Google Sheets">
+    Abre el archivo `tareas_calaire.csv` generado e impórtalo o pégalo en Google Sheets para usar con el sistema de alertas automáticas. Consulta la página [Alertas automáticas de tareas en Google Sheets](/herramientas/alertas-google-sheets) para configurar las alertas.
+  </Step>
+</Steps>
+
+## Argumentos CLI
+
+| Argumento | Descripción | Valor por defecto |
+|-----------|-------------|-------------------|
+| `--pages` | Directorio de páginas permanentes del grafo | `pages/` |
+| `--journals` | Directorio de entradas diarias del journal | `journals/` |
+| `--output` | Ruta del archivo CSV de salida | `tareas_calaire.csv` |
+
+## Formato del CSV de salida
+
+El archivo generado tiene ocho columnas fijas con encabezados en la primera fila:
+
+| Columna | Descripción | Ejemplo |
+|---------|-------------|---------|
+| `id` | Identificador único con prefijo según origen | `APP-01`, `J-03`, `PI-07`, `EA-02` |
+| `tarea` | Texto de la tarea sin propiedades | `Revisar algoritmo de puntuación z` |
+| `deadline` | Fecha límite en formato `YYYY-MM-DD` o vacío | `2026-02-15` |
+| `prioridad` | Nivel de prioridad o vacío | `high`, `medium`, `low` |
+| `proyecto` | Proyecto asociado extraído de `project::` | `CALAIRE-APP` |
+| `fuente` | Ruta relativa al archivo de origen | `journals/2026_01_15.md` |
+| `estado` | Estado de la tarea en minúsculas | `todo`, `doing`, `done` |
+| `notas` | Líneas adicionales del bloque sin propiedades | texto libre |
+
+<Note>
+  Las comas dentro de los campos `tarea` y `notas` se reemplazan automáticamente por punto y coma (`;`) para evitar conflictos con el formato CSV.
+</Note>
+
+## Detección de tareas en Logseq
+
+El script detecta cualquier bloque que comience con `- TODO`, `- DOING` o `- DONE`, con o sin tabulación de indentación. Las propiedades del bloque deben estar en las líneas siguientes con la sintaxis `propiedad:: valor`:
+
+```markdown
+- TODO Revisar algoritmo de puntuación z en CALAIRE-APP
+  project:: [[CALAIRE-APP]]
+  priority:: high
+  deadline:: 2026-02-15
+```
+
+Las cuatro propiedades reconocidas son:
+
+| Propiedad | Formato Logseq | Patrón detectado |
+|-----------|----------------|------------------|
+| `deadline` | `deadline:: YYYY-MM-DD` | `\d{4}-\d{2}-\d{2}` |
+| `priority` | `priority:: high\|medium\|low` | valor literal |
+| `project` | `project:: [[Nombre]]` | texto entre `[[` y `]]` |
+| `status` | `status:: valor` | cualquier `\w+` |
+
+<Warning>
+  La indentación en Logseq usa **tabuladores**, no espacios. Un bloque de tarea con espacios en lugar de tabs puede no ser detectado correctamente.
+</Warning>
+
+## Lógica de prefijos de ID
+
+Los identificadores se asignan automáticamente según el origen del bloque:
+
+| Prefijo | Condición |
+|---------|-----------|
+| `APP-` | La propiedad `project::` contiene `CALAIRE-APP` |
+| `J-` | El archivo está en el directorio `journals/` |
+| `PI-` | El nombre del archivo contiene `Prueba Piloto` |
+| `EA-` | Cualquier otro caso (páginas generales del grafo) |
+
+El número después del prefijo es secuencial dentro de cada archivo procesado (p. ej., `APP-01`, `APP-02`).
+
+## Orden de las filas en el CSV
+
+Las tareas se ordenan con la siguiente prioridad:
+
+1. **Tareas con deadline** — ordenadas cronológicamente de más próxima a más lejana
+2. **Tareas sin deadline** — al final, ordenadas alfabéticamente por ID
+
+Esta lógica garantiza que las tareas urgentes aparezcan en la parte superior al importar el CSV.
+
+## Mejores prácticas para Logseq
+
+Para maximizar la cobertura del exportador, mantén el siguiente formato en todos los bloques de tarea:
+
+```markdown
+- TODO Descripción clara y concisa de la tarea
+  project:: [[CALAIRE-EA]]
+  priority:: high
+  deadline:: 2026-03-15
+```
+
+<Tip>
+  Agrega siempre `deadline::` a las tareas con fecha límite real. Las tareas sin deadline se exportan pero quedan al final del CSV y no generan alertas en Google Sheets.
+</Tip>

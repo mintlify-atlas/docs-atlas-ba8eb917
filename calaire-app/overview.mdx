@@ -1,0 +1,45 @@
+---
+title: "CALAIRE-APP: Aplicativo Estadístico R/Shiny ISO 13528"
+description: "Aplicativo R/Shiny para análisis estadístico de ensayos de aptitud, construido sobre el paquete ptcalc bajo normas ISO 13528:2017 e ISO 17043:2023."
+---
+
+CALAIRE-APP es el aplicativo estadístico desarrollado para el proyecto CALAIRE-EA (Proyecto 61134). Implementado en R 4.1.0+ con el framework Shiny y el paquete especializado `ptcalc`, el aplicativo ejecuta los cálculos normativos de homogeneidad, estabilidad, nIQR y algoritmos robustos exigidos por ISO 13528:2017 e ISO 17043:2023. Su rol en la Etapa 2 del proyecto es dar soporte al análisis de resultados de la prueba piloto y a la consolidación técnica del diseño del servicio.
+
+<Note>
+**Estado actual: OPERATIVO EN AJUSTE.** El aplicativo funciona correctamente para los módulos de preprocesamiento, homogeneidad, estabilidad, nIQR y MADe. Se encuentran en revisión los módulos de incertidumbre, Algoritmo A, compatibilidad metrológica y puntuaciones de desempeño.
+</Note>
+
+## Ficha técnica
+
+| Atributo | Valor |
+|---|---|
+| Lenguaje | R 4.1.0+ (Shiny) |
+| Paquete estadístico | ptcalc |
+| Normativa de referencia | ISO 13528:2017, ISO 17043:2023 |
+| Fase del proyecto | Etapa 2 |
+| Repositorio | Pendiente — migración a GitHub grupo |
+
+## Origen contractual
+
+CALAIRE-APP fue desarrollado en el marco del **Contrato APP (2025)**, mediante Invitación Directa M-1256. El desarrollo fue ejecutado por Wilson Salas, líder técnico del proyecto con expertise en calidad de aire, ensayos de aptitud y metrología. El contrato de desarrollo tuvo cierre formal en diciembre de 2025.
+
+Wilson Salas ejerce actualmente como director técnico del alistamiento y ejecución de la prueba piloto (CO, NOx, SO₂, O₃), con soporte del aplicativo para la revisión y análisis de resultados.
+
+## Rol en Etapa 2
+
+En la Etapa 2 del proyecto CALAIRE-EA, el aplicativo cumple tres funciones principales:
+
+- **Análisis de resultados de rondas piloto:** procesa los datos reportados por los laboratorios participantes y calcula estadísticos de desempeño conforme a ISO 13528.
+- **Soporte a la consolidación técnica:** genera informes de homogeneidad y estabilidad en formato DOCX con previsualización HTML.
+- **Validación del diseño del servicio:** los resultados del aplicativo son comparados por el consultor especialista César Yate (ISO 17043) como parte del proceso de validación técnica.
+
+## Explorar documentación
+
+<CardGroup cols={2}>
+  <Card title="Módulos estadísticos" icon="calculator" href="/calaire-app/modulos-estadisticos">
+    Descripción de cada módulo de cálculo: preprocesamiento, homogeneidad, estabilidad, nIQR, MADe, Algoritmo A y puntuaciones de desempeño.
+  </Card>
+  <Card title="Validación técnica" icon="circle-check" href="/calaire-app/validacion">
+    Resultados del proceso de validación por César Yate, hallazgos clave, estado por módulo y tareas pendientes del backlog.
+  </Card>
+</CardGroup>

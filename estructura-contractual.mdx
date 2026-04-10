@@ -1,0 +1,105 @@
+---
+title: "Estructura contractual del Proyecto 61134"
+description: "Los tres contratos de CALAIRE-EA: Contrato 1 (metodología), Contrato APP (R/Shiny) y Contrato 2 (prueba piloto 2026), con sus entregables y estado actual."
+---
+
+El Proyecto 61134 se ejecuta a través de tres frentes contractuales complementarios que cubren desde el diseño metodológico hasta la validación operativa del servicio de Ensayos de Aptitud. Esta página describe cada contrato, su período de ejecución, alcance, entregables y estado actual, permitiendo una trazabilidad completa del avance del proyecto.
+
+## Resumen de la estructura contractual
+
+| Contrato | Período | Naturaleza | Alcance principal | Estado |
+|----------|---------|------------|-------------------|--------|
+| **Contrato 1** | 2025 | Etapa 1 | Estado del arte, protocolos CO/NOx/SO2/O3, procedimientos SGC, diseño metodológico | Completado |
+| **Contrato APP** | 2025 | Frente paralelo | Desarrollo de CALAIRE-APP en R/Shiny para análisis ISO 13528 | Completado |
+| **Contrato 2** | 2026 | Etapa 2 | Alistamiento, prueba piloto, revisión de resultados, ajustes del diseño | En progreso |
+
+## Estado operativo actual
+
+El proyecto se encuentra en la **Etapa 2 (Contrato 2, 2026)**. Las actividades en curso incluyen coordinación de rondas piloto, confirmación de laboratorios participantes, integración entre resultados de campo y análisis en CALAIRE-APP, y ajustes técnicos bajo criterios ISO 17043/13528 y NTC ISO/IEC 17025.
+
+<Note>
+  Los Contratos 1 y APP han sido completados satisfactoriamente. El foco operativo actual recae sobre el **Contrato 2**, cuya ejecución define la validación final del diseño del servicio.
+</Note>
+
+## Detalle por contrato
+
+<Tabs>
+  <Tab title="Contrato 1">
+
+**Período**: 2025 | **Etapa**: 1 | **Estado**: Completado
+
+El Contrato 1 constituyó la base metodológica y documental del proyecto. Su ejecución produjo el marco técnico necesario para el diseño del servicio de ensayos de aptitud, cubriendo los cuatro gases contaminantes criterio (CO, NOx, SO2, O3) y estableciendo los cimientos del Sistema de Gestión de Calidad (SGC).
+
+**Responsable técnico**: Wilson Rafael Salas Chavez
+
+### Entregables del Contrato 1
+
+<AccordionGroup>
+  <Accordion title="Informe de estado del arte">
+    Revisión sistemática del estado de la práctica en comparaciones interlaboratorios y ensayos de aptitud para gases contaminantes criterio a nivel nacional e internacional. Incluye análisis de proveedores de EA existentes y referencias normativas clave.
+  </Accordion>
+  <Accordion title="Protocolos técnicos por gas">
+    Cuatro protocolos específicos desarrollados para CO, NOx, SO2 y O3, cubriendo condiciones de medición, criterios de aceptación, manejo de materiales de referencia y procedimientos de calibración aplicables a cada gas.
+  </Accordion>
+  <Accordion title="Procedimientos e instructivos SGC">
+    Documentación del marco del Sistema de Gestión de Calidad: procedimientos operativos, instructivos técnicos y estructura documental alineada con los requisitos de ISO 17043:2023 y NTC ISO/IEC 17025:2017.
+  </Accordion>
+  <Accordion title="Documentación base para diseño estadístico">
+    Fundamentos metodológicos para el diseño estadístico y operativo del servicio de EA, incluyendo definición de valores asignados, criterios de evaluación del desempeño y estructura de informes bajo ISO 13528:2017.
+  </Accordion>
+</AccordionGroup>
+
+  </Tab>
+  <Tab title="Contrato APP">
+
+**Período**: 2025 | **Naturaleza**: Frente paralelo | **Estado**: Completado
+
+El Contrato APP se ejecutó en paralelo al Contrato 1 y produjo CALAIRE-APP, el aplicativo estadístico del proyecto desarrollado en R/Shiny. La aplicación implementa los algoritmos de evaluación de desempeño de laboratorios definidos en ISO 13528:2017 y genera los informes técnicos de cada ronda de EA.
+
+**Responsable**: Wilson Rafael Salas Chavez
+
+### Entregables del Contrato APP
+
+<AccordionGroup>
+  <Accordion title="Aplicativo estadístico CALAIRE-APP (R/Shiny)">
+    Aplicación web desarrollada en software libre (R/Shiny) que implementa los métodos estadísticos de ISO 13528:2017 para la evaluación de resultados de ensayos de aptitud. Permite carga de datos, cálculo de estadísticos robustos y generación de z-scores o En scores por laboratorio participante.
+  </Accordion>
+  <Accordion title="Módulos de cálculo para validación de ítems">
+    Módulos independientes para la validación estadística de los ítems de ensayo: homogeneidad, estabilidad y determinación del valor asignado. Incluye pruebas de Cochran y Grubbs según requerimientos de la norma.
+  </Accordion>
+  <Accordion title="Estructura de reportes técnicos">
+    Plantillas y módulos de generación de informes técnicos para cada ronda de EA, incluyendo tablas de desempeño por participante, gráficos de control y sección de hallazgos bajo el formato requerido por ISO 17043:2023.
+  </Accordion>
+  <Accordion title="Soporte de validación">
+    Documentación de validación comparativa del aplicativo con cálculos manuales de referencia. Incluye casos de prueba con datos simulados y registro de revisiones técnicas externas.
+  </Accordion>
+</AccordionGroup>
+
+  </Tab>
+  <Tab title="Contrato 2">
+
+**Período**: 2026 | **Etapa**: 2 | **Estado**: En progreso
+
+El Contrato 2 constituye la etapa de validación operativa del servicio diseñado en el Contrato 1. Su ejecución incluye el alistamiento de equipos e insumos, la coordinación y ejecución de la prueba piloto con laboratorios participantes, y la consolidación del diseño final del servicio a partir de los resultados obtenidos.
+
+**Responsable técnico**: Wilson Rafael Salas Chavez
+
+### Entregables del Contrato 2
+
+<AccordionGroup>
+  <Accordion title="Plan de alistamiento y cronograma de prueba piloto">
+    Documento de planificación operativa que define el cronograma de rondas, los laboratorios participantes confirmados, los requisitos logísticos por ronda (transporte de equipos, cadena de custodia, control de condiciones) y los hitos de control del Contrato 2.
+  </Accordion>
+  <Accordion title="Ejecución y seguimiento técnico de la prueba piloto">
+    Registro sistemático de la ejecución de cada ronda: resultados de campo por laboratorio, condiciones de medición, incidencias técnicas y trazabilidad metrológica. Los datos se integran a CALAIRE-APP para análisis estadístico en tiempo real.
+  </Accordion>
+  <Accordion title="Informe de resultados y socialización técnica">
+    Informe consolidado de resultados de la prueba piloto con análisis estadístico conforme a ISO 13528:2017, evaluación del desempeño por laboratorio, hallazgos del proceso y recomendaciones para el diseño definitivo del servicio.
+  </Accordion>
+  <Accordion title="Ajustes documentales e integración al SGC">
+    Actualización de protocolos, procedimientos e instructivos del SGC a partir de las lecciones aprendidas de la prueba piloto. Consolidación de la documentación del servicio para su eventual operación bajo los requisitos de ISO 17043:2023.
+  </Accordion>
+</AccordionGroup>
+
+  </Tab>
+</Tabs>

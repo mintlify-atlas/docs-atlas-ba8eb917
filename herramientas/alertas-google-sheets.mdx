@@ -1,0 +1,172 @@
+---
+title: "Alertas automáticas de tareas en Google Sheets"
+description: "Instala alertas_tareas.gs en Apps Script para recibir email diario cuando una tarea CALAIRE-EA vence en 3 días o menos, con formato condicional de colores."
+---
+
+El script `alertas_tareas.gs` se instala en Google Sheets mediante Apps Script y ejecuta una verificación automática diariamente a las 8 a.m. Cuando detecta tareas con deadline en los próximos 3 días, envía un correo HTML con la lista de tareas próximas a vencer, su prioridad, proyecto y días restantes. Esta página explica el proceso de configuración paso a paso, las funciones disponibles y la resolución de problemas frecuentes.
+
+## Requisitos previos
+
+- Una cuenta de Google con acceso a Google Sheets y Gmail
+- El archivo `tareas_calaire.csv` generado con `tools/export_tareas.py` (ver [Exportar tareas de Logseq a CSV](/herramientas/export-tareas))
+- El contenido de `tools/alertas_tareas.gs` del repositorio CALAIRE-EA
+
+## Configuración
+
+<Steps>
+  <Step title="Exportar el CSV actualizado">
+    Ejecuta el exportador Python para obtener las tareas más recientes del grafo antes de importar:
+
+    ```bash
+    python tools/export_tareas.py
+    ```
+  </Step>
+  <Step title="Importar el CSV a Google Sheets">
+    Abre [Google Sheets](https://sheets.google.com) y crea una hoja nueva llamada **Tareas CALAIRE-EA**. Luego importa los datos:
+
+    - **Opción A — Importar archivo:** Ve a `Archivo → Importar`, sube `tareas_calaire.csv` y selecciona "Reemplazar hoja de cálculo".
+    - **Opción B — Copy-paste:** Copia el contenido del CSV y pégalo directamente en la celda A1 de la hoja.
+
+    <Info>
+      Asegúrate de que la primera fila contenga los encabezados: `id, tarea, deadline, prioridad, proyecto, fuente, estado, notas`. El script usa índices de columna fijos (0-based) según ese orden.
+    </Info>
+  </Step>
+  <Step title="Abrir Apps Script">
+    En la hoja de Google Sheets, ve a **Extensiones → Apps Script**. Se abrirá el editor de código en una nueva pestaña.
+  </Step>
+  <Step title="Pegar el código del script">
+    Elimina el contenido por defecto del editor y pega el contenido completo de `tools/alertas_tareas.gs`. El script se organiza en las siguientes funciones principales:
+
+    ```javascript
+    const CONFIG = {
+      COLUMNS: { ID: 0, TAREA: 1, DEADLINE: 2, PRIORIDAD: 3,
+                 PROYECTO: 4, FUENTE: 5, ESTADO: 6, NOTAS: 7 },
+      ALERT_DAYS: 3,
+      EMAIL: 'tu-email@ejemplo.com' // ← CAMBIAR ESTO
+    };
+    ```
+  </Step>
+  <Step title="Configurar el email destinatario">
+    Reemplaza el valor de `CONFIG.EMAIL` con tu dirección de correo real antes de guardar:
+
+    ```javascript
+    EMAIL: 'usuario@dominio.com'
+    ```
+
+    <Warning>
+      Si no cambias este valor, el script intentará enviar correos a `tu-email@ejemplo.com` y fallará silenciosamente. Esta es la causa más frecuente de que no lleguen alertas.
+    </Warning>
+  </Step>
+  <Step title="Instalar el trigger diario">
+    En el editor de Apps Script, selecciona la función `configurarTrigger` en el menú desplegable de funciones y haz clic en **Ejecutar**. Esto instala un trigger que ejecuta `enviarAlertas` automáticamente cada día a las 8 a.m.
+
+    ```javascript
+    function configurarTrigger() {
+      // Elimina triggers previos de enviarAlertas y crea uno nuevo
+      ScriptApp.newTrigger('enviarAlertas')
+        .timeBased()
+        .everyDays(1)
+        .atHour(8)
+        .create();
+    }
+    ```
+  </Step>
+  <Step title="Conceder permisos">
+    Google solicitará autorización para acceder a Gmail y Google Sheets en nombre de tu cuenta. Revisa los permisos solicitados y acepta para completar la instalación.
+
+    <Note>
+      Si ves una advertencia de "aplicación no verificada", haz clic en "Configuración avanzada" y luego en "Ir a [nombre del proyecto] (no seguro)" para continuar. Es normal para scripts de Apps Script creados manualmente.
+    </Note>
+  </Step>
+</Steps>
+
+## Funciones disponibles
+
+Una vez instalado el script, dispones de estas cuatro funciones ejecutables desde el editor de Apps Script:
+
+| Función | Descripción |
+|---------|-------------|
+| `configurarTrigger()` | Instala (o reinstala) el trigger diario a las 8 a.m. Elimina triggers anteriores del mismo tipo antes de crear el nuevo. |
+| `testAlertas()` | Ejecuta la verificación de alertas de forma inmediata, sin esperar al trigger. Útil para verificar la configuración. |
+| `estadisticas()` | Muestra en el log de ejecución un resumen de la hoja: total, con deadline, vencidas, próximas, completadas y alta prioridad. |
+| `formatoCondicional()` | Aplica manualmente el formato de color a toda la hoja según las reglas de estado y prioridad. |
+
+## Lógica de alertas
+
+El script lee cada fila de la hoja (omitiendo el encabezado) y calcula los días restantes hasta el deadline:
+
+- Solo procesa tareas que tengan deadline y no estén en estado `done` o `DONE`
+- Envía alerta si `0 ≤ días_restantes ≤ CONFIG.ALERT_DAYS` (por defecto 3)
+- Las tareas vencidas (días negativos) **no** generan alerta de email, pero sí se colorean en rojo
+
+## Formato del email de alerta
+
+El correo que se envía tiene asunto `📋 N tarea(s) próxima(s) a vencer` y un cuerpo HTML con una tabla que incluye:
+
+- ID de la tarea
+- Prioridad con indicador de color (🔴 high / 🟡 medium / 🟢 low)
+- Proyecto asociado
+- Descripción de la tarea
+- Deadline en formato local (`es-ES`)
+- Días restantes (en rojo si ≤ 1, en naranja si > 1)
+- Enlace directo a la hoja de Google Sheets
+
+## Formato condicional de colores
+
+El script aplica automáticamente colores a las filas después de cada verificación de alertas:
+
+| Condición | Color de fondo | Código hex |
+|-----------|----------------|------------|
+| Estado = `DONE` o `done` | Verde | `#d4edda` |
+| Deadline anterior a hoy | Rojo | `#f8d7da` |
+| Prioridad = `high` | Naranja claro | `#fff3cd` |
+
+<Note>
+  Las reglas se aplican en ese orden de prioridad. Una tarea `DONE` aparece en verde aunque tenga prioridad `high`. Si necesitas reaplícar los colores sin esperar al trigger, ejecuta `formatoCondicional()` manualmente.
+</Note>
+
+## Estadísticas en el log de ejecución
+
+La función `estadisticas()` imprime en el log de Apps Script (Ver → Registros de ejecución):
+
+```text
+📊 Estadísticas de Tareas:
+Total: 28
+Con deadline: 13
+Vencidas: 2
+Próximas (≤3 días): 5
+Completadas: 5
+Alta prioridad: 8
+```
+
+## Resolución de problemas
+
+<AccordionGroup>
+  <Accordion title="No llegan emails de alerta">
+    1. Verifica que `CONFIG.EMAIL` tenga tu dirección real (no el valor de ejemplo).
+    2. Ejecuta `testAlertas()` manualmente para comprobar si el envío funciona.
+    3. Revisa la carpeta de spam de tu correo.
+    4. Confirma que concediste permisos de Gmail durante la instalación. Si no lo hiciste, ejecuta `configurarTrigger()` de nuevo para que Google solicite los permisos nuevamente.
+  </Accordion>
+  <Accordion title="El trigger no aparece o no se ejecuta">
+    Ejecuta `configurarTrigger()` desde el editor de Apps Script. La función elimina triggers existentes de `enviarAlertas` y crea uno nuevo. Puedes verificar los triggers activos en **Apps Script → Activadores** (ícono de reloj en la barra lateral izquierda).
+  </Accordion>
+  <Accordion title="Los colores no se aplican a las filas">
+    Ejecuta `formatoCondicional()` manualmente desde el editor. Si el problema persiste, verifica que las columnas del CSV importado coincidan exactamente con el orden esperado: `id, tarea, deadline, prioridad, proyecto, fuente, estado, notas`. Un orden diferente hace que el script lea columnas incorrectas.
+  </Accordion>
+  <Accordion title="Error de permisos al ejecutar el script">
+    Google Apps Script requiere autorización explícita para acceder a Gmail y Sheets. Si ves un error de autorización, abre el menú **Ejecutar → Revisar permisos** y acepta el acceso. Si aparece la advertencia de "aplicación no verificada", es normal para scripts creados desde tu cuenta — haz clic en "Configuración avanzada" para continuar.
+  </Accordion>
+  <Accordion title="El script no encuentra tareas con deadline próximo">
+    Verifica que las celdas de la columna `deadline` (columna C) tengan formato de fecha reconocible (`YYYY-MM-DD`). Google Sheets puede interpretar fechas importadas como texto. Si es necesario, selecciona la columna C y aplica el formato `Número → Fecha` desde el menú de formato.
+  </Accordion>
+  <Accordion title="Cómo cambiar el umbral de días de anticipación">
+    Edita el valor `ALERT_DAYS` en el objeto `CONFIG` al inicio del script. El valor por defecto es `3`. Por ejemplo, para recibir alertas con 5 días de anticipación:
+
+    ```javascript
+    ALERT_DAYS: 5,
+    ```
+
+    Después de cambiar el valor, guarda el archivo y ejecuta `configurarTrigger()` para que el cambio tome efecto.
+  </Accordion>
+</AccordionGroup>

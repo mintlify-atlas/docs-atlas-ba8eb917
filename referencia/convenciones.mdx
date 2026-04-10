@@ -1,0 +1,178 @@
+---
+title: "Convenciones de idioma, archivos y sintaxis en CALAIRE-EA"
+description: "Reglas de idioma, nomenclatura de archivos, sintaxis de bloques Logseq, flujo de tareas y organización del diario para el grafo CALAIRE-EA."
+---
+
+El grafo CALAIRE-EA sigue un conjunto de convenciones estrictas que garantizan la coherencia entre entradas de diario, páginas permanentes, tareas y propiedades. Esta página documenta todas las reglas de idioma, nomenclatura, indentación y flujo de trabajo que deben respetarse al editar cualquier archivo del grafo.
+
+## Convenciones de idioma
+
+El grafo mezcla dos idiomas de manera deliberada: el contenido narrativo se escribe en español para mantener la coherencia documental del proyecto, mientras que las propiedades y etiquetas de sistema se escriben en inglés para compatibilidad con las consultas de Logseq.
+
+<Tabs>
+  <Tab title="Contenido y prosa">
+    Todo lo que el lector humano lee directamente se escribe en **español**: títulos de páginas, descripciones, notas de reunión, entradas de diario y comentarios técnicos.
+
+    | Contexto | Idioma | Ejemplos |
+    |---|---|---|
+    | Títulos de páginas | Español | `Prueba Piloto.md`, `Equipos.md` |
+    | Prosa y descripciones | Español | Notas de reunión, eventos de diario |
+    | Referencias a páginas | Español | `[[Prueba Piloto]]`, `[[Reunión: Tema]]` |
+  </Tab>
+  <Tab title="Propiedades y etiquetas">
+    Las propiedades de bloque y las etiquetas de sistema se escriben en **inglés** para que las consultas `datalog` de Logseq funcionen correctamente.
+
+    | Contexto | Idioma | Ejemplos |
+    |---|---|---|
+    | Propiedades de bloque | Inglés | `priority::`, `deadline::`, `type::`, `status::` |
+    | Etiquetas de sistema | Inglés | `#decision`, `#MOC`, `#System` |
+    | Estado de tareas | Inglés | `TODO`, `DOING`, `DONE` |
+  </Tab>
+</Tabs>
+
+## Flujo de tareas
+
+Las tareas en el grafo siguen un flujo lineal de tres estados. Cada tarea debe existir dentro de una sección temática del diario para mantener el contexto inmediato y evitar duplicación.
+
+```
+TODO → DOING → DONE
+```
+
+- **TODO**: tarea identificada, pendiente de inicio.
+- **DOING**: tarea en ejecución activa.
+- **DONE**: tarea completada y documentada.
+
+Las tareas aparecen automáticamente en la consulta `📋 CALAIRE-EA Tasks` del pie del diario cuando incluyen la propiedad `project:: [[CALAIRE-EA]]`.
+
+<CodeGroup>
+
+```markdown Tarea estándar
+- TODO Descripción de la tarea
+  project:: [[CALAIRE-EA]]
+  deadline:: 2026-03-15
+  priority:: high
+```
+
+```markdown Tarea en progreso
+- DOING Revisión de protocolo CO
+  project:: [[CALAIRE-EA]]
+  deadline:: 2026-03-20
+  status:: in_progress
+```
+
+</CodeGroup>
+
+## Nomenclatura de archivos
+
+Cada directorio tiene su propio formato de nombre de archivo. No mezclar los formatos entre directorios.
+
+| Directorio | Formato | Ejemplo |
+|---|---|---|
+| `journals/` | `YYYY_MM_DD.md` | `2026_01_30.md` |
+| `pages/` | Title Case con espacios | `Prueba Piloto.md` |
+| `docs/` | `lowercase_with_underscores` | `iso_17043_2023.md` |
+
+<Warning>
+No cambiar el formato de nombre de los archivos de `journals/`. Logseq los reconoce por su patrón `YYYY_MM_DD.md` y un formato diferente rompe la navegación temporal del grafo.
+</Warning>
+
+## Sintaxis de bloques Logseq
+
+### Estructura e indentación
+
+Logseq usa **tabuladores** (no espacios) para representar la jerarquía de bloques. Cada línea que comienza con `- ` es un bloque independiente. Los bloques anidados usan un tabulador adicional por nivel.
+
+<CodeGroup>
+
+```markdown Correcto (tabuladores)
+- Bloque padre
+	- Bloque hijo nivel 1
+		- Bloque hijo nivel 2
+		  property:: value
+```
+
+```markdown Incorrecto (espacios)
+- Bloque padre
+  - Bloque hijo nivel 1
+    - Bloque hijo nivel 2
+      property:: value
+```
+
+</CodeGroup>
+
+### Propiedades de bloque
+
+Las propiedades se escriben en líneas separadas **debajo** del contenido del bloque, usando la sintaxis `property:: value`. No se escriben en la misma línea que el contenido.
+
+```markdown
+- [[Page Reference]] links a otra página
+- #tag crea etiqueta en línea
+- ((block-id)) referencia un bloque específico
+
+- Bloque con propiedades
+  date:: 2026-03-15
+  category:: [[Prueba Piloto]]
+  status:: confirmed
+  project:: [[CALAIRE-EA]]
+```
+
+### Propiedades válidas de bloque de evento
+
+| Propiedad | Formato | Valores válidos |
+|---|---|---|
+| `date::` | `YYYY-MM-DD` | Fecha del evento |
+| `category::` | `[[Categoría]]` | `[[Prueba Piloto]]`, `[[Desarrollo Técnico]]`, `[[Gestión Administrativa]]`, `[[Infraestructura]]`, `[[SGC / Calidad]]` |
+| `status::` | minúsculas | `confirmed`, `pending`, `in_progress`, `in_review`, `cancelled`, `completed`, `documented`, `in_study` |
+| `project::` | `[[Página]]` | `[[CALAIRE-EA]]` |
+| `deadline::` | `YYYY-MM-DD` | Fecha límite de la tarea |
+| `priority::` | minúsculas | `high`, `medium`, `low` |
+
+## Estructura del diario
+
+Los archivos en `journals/` siguen una estructura fija con secciones temáticas estándar. Las tareas, decisiones y eventos deben ubicarse **dentro de la sección temática** correspondiente.
+
+```markdown
+# Registro del Día
+  project:: [[CALAIRE-EA]]
+- ## [Nombre de Sección]
+	- **[Título del Evento]:** descripción técnica detallada.
+	  date:: YYYY-MM-DD
+	  category:: [[Categoría]]
+	  status:: [valor]
+- ## Referencias
+	- [[Página Relevante 1]]
+```
+
+### Secciones estándar del diario
+
+| Sección | Propósito |
+|---|---|
+| `Gestión de Cronograma Prueba Piloto` | Cambios de calendario, actualizaciones de rondas |
+| `Gestión de Participantes Prueba Piloto` | Confirmaciones de laboratorios, invitaciones |
+| `Recursos Humanos` | Cambios de equipo, contratación, roles |
+| `Desarrollo Técnico` | CALAIRE-APP, hallazgos técnicos |
+| `Gestión Administrativa` | Tareas administrativas, comunicaciones |
+| `Infraestructura` | Equipos, instalaciones, espacio físico |
+| `Prospectación de Laboratorios` | Nuevos contactos, alcance a laboratorios |
+| `Aprendizajes y Decisiones` | Lecciones aprendidas, decisiones clave |
+| `Actualizaciones de Documentación` | Actualizaciones del grafo, actividades de sincronización |
+| `Referencias` | Siempre la última sección — enlaces a páginas relevantes |
+
+## Lineamientos de edición
+
+### Lo que se debe hacer
+
+- Preservar la indentación con tabuladores exactamente como está
+- Mantener las propiedades en líneas separadas debajo de su bloque
+- Usar `[[Nombre de Página]]` para enlaces internos
+- Agregar `project:: [[CALAIRE-EA]]` a las tareas para visibilidad en consultas
+- Usar `collapsed:: true` para bloques de contenido extenso
+- Escribir prosa en español y propiedades en inglés
+
+### Lo que no se debe hacer
+
+- Usar espacios para indentación (Logseq requiere tabuladores)
+- Crear páginas nuevas sin enlazarlas desde un MOC existente
+- Eliminar o modificar declaraciones `template::` en `templates.md`
+- Agregar archivos al directorio `logseq/` sin entender `config.edn`
+- Cambiar el formato de nombre de archivos de diario (debe ser `YYYY_MM_DD.md`)

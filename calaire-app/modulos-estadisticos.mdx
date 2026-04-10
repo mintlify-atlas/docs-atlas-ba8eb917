@@ -1,0 +1,137 @@
+---
+title: "Módulos estadísticos de CALAIRE-APP (ISO 13528)"
+description: "Descripción técnica de los módulos de cálculo de CALAIRE-APP: homogeneidad, estabilidad, nIQR, MADe y Algoritmo A conforme a ISO 13528:2017."
+---
+
+CALAIRE-APP organiza sus cálculos en módulos independientes que cubren las etapas del proceso estadístico de un ensayo de aptitud (EA): desde el preprocesamiento de datos brutos hasta la asignación de puntuaciones de desempeño a los participantes. Cada módulo implementa los métodos normativos de ISO 13528:2017 a través del paquete `ptcalc` en R 4.1.0+.
+
+Los módulos se agrupan en dos categorías según su estado de validación: **validados** (verificados por César Yate, consultor especialista ISO 17043) y **en revisión** (pendientes de completar la validación técnica).
+
+## Módulos validados
+
+Los siguientes módulos han sido verificados y producen resultados correctos conforme a ISO 13528:2017.
+
+<AccordionGroup>
+  <Accordion title="Preprocesamiento" icon="filter" defaultOpen={false}>
+    El módulo de preprocesamiento recibe los datos brutos reportados por los laboratorios participantes y los prepara para el análisis estadístico. Las operaciones incluyen:
+
+    - Lectura e integración de datos por ronda y analito.
+    - Detección y marcado de valores faltantes o fuera de rango de reporte.
+    - Estandarización de unidades y formato de entrada.
+    - Registro de trazabilidad de la fuente de datos por participante.
+
+    El módulo no realiza ninguna imputación automática de datos; los valores ausentes se marcan explícitamente y se excluyen de los cálculos posteriores. Este comportamiento fue verificado durante la validación de febrero de 2026.
+  </Accordion>
+
+  <Accordion title="Homogeneidad" icon="chart-bar" defaultOpen={false}>
+    El módulo de homogeneidad evalúa si las muestras del material de referencia del EA son suficientemente uniformes para usarse en la ronda, siguiendo el procedimiento del Anexo B de ISO 13528:2017.
+
+    **Método aplicado:** análisis de varianza (ANOVA) de un factor sobre los resultados de las alícuotas del material. Se calcula la varianza entre grupos (`s_bb`) y la varianza dentro de grupos (`s_w`).
+
+    **Criterio de aceptación:** la contribución de la inhomogeneidad a la incertidumbre estándar del valor asignado, `u_bb`, debe ser inferior al 30 % de la desviación estándar para ensayos de aptitud `σ_p`.
+
+    El módulo genera un informe en formato DOCX con previsualización HTML que documenta los resultados del análisis por ronda y analito.
+
+    <Note>
+      El cálculo de la incertidumbre de homogeneidad (`u_bb`) está pendiente de validación en la iteración actual. Ver [Módulos en revisión](#módulos-en-revisión).
+    </Note>
+  </Accordion>
+
+  <Accordion title="Estabilidad" icon="wave-square" defaultOpen={false}>
+    El módulo de estabilidad verifica que el material de referencia mantiene sus propiedades a lo largo del período de uso de la ronda, conforme al Anexo C de ISO 13528:2017.
+
+    **Método aplicado:** regresión lineal de los resultados de estabilidad en función del tiempo. Se calcula la pendiente `b₁` y su incertidumbre estándar `u(b₁)`.
+
+    **Criterio de aceptación:** la contribución de la inestabilidad a la incertidumbre estándar del valor asignado, `u_ts`, se considera aceptable cuando `|b₁| × t_max` es pequeño en comparación con `σ_p`.
+
+    El módulo produce el mismo informe consolidado que el módulo de homogeneidad (DOCX + HTML).
+
+    <Note>
+      El cálculo de la incertidumbre de estabilidad (`u_ts`) está pendiente de validación. Ver [Módulos en revisión](#módulos-en-revisión).
+    </Note>
+  </Accordion>
+
+  <Accordion title="nIQR — Rango intercuartílico normalizado" icon="arrows-left-right" defaultOpen={false}>
+    El módulo nIQR calcula el rango intercuartílico normalizado como estimador robusto de la desviación estándar de los resultados de los participantes.
+
+    **Fórmula:**
+
+    ```
+    nIQR = (Q3 - Q1) / 1.3490
+    ```
+
+    Donde Q1 y Q3 son el primer y tercer cuartil de la distribución de resultados, y 1.3490 es el factor de normalización que hace al nIQR asintóticamente consistente con la desviación estándar bajo distribución normal.
+
+    El nIQR se emplea como estimador de `σ_p` (desviación estándar para ensayos de aptitud) cuando no se dispone de un valor de referencia externo, conforme a la cláusula 5.4 de ISO 13528:2017.
+  </Accordion>
+
+  <Accordion title="MADe — Estimador de desviación absoluta mediana" icon="sigma" defaultOpen={false}>
+    El módulo MADe calcula la desviación absoluta mediana escalada, un estimador robusto alternativo al nIQR para la dispersión de resultados de participantes.
+
+    **Fórmula:**
+
+    ```
+    MADe = 1.4826 × median(|xᵢ - median(x)|)
+    ```
+
+    Donde 1.4826 es el factor de consistencia bajo distribución normal. Al igual que el nIQR, el MADe puede usarse como estimador de `σ_p` y es especialmente útil cuando la distribución presenta colas pesadas o valores atípicos.
+
+    Ambos estimadores (nIQR y MADe) son calculados de forma simultánea por el aplicativo, permitiendo comparar su estabilidad frente al conjunto de datos de cada ronda.
+  </Accordion>
+</AccordionGroup>
+
+## Módulos en revisión
+
+Los siguientes módulos están implementados en el aplicativo pero requieren completar su proceso de validación técnica con César Yate antes de ser empleados en producción.
+
+<Warning>
+Los módulos listados a continuación no deben usarse para tomar decisiones técnicas o reportar resultados a participantes hasta que su validación sea completada y documentada en el informe formal.
+</Warning>
+
+<AccordionGroup>
+  <Accordion title="Incertidumbre de homogeneidad y estabilidad" icon="triangle-exclamation" defaultOpen={false}>
+    Los cálculos de `u_bb` (incertidumbre por inhomogeneidad) y `u_ts` (incertidumbre por inestabilidad) están implementados, pero la metodología de propagación de incertidumbre hacia el valor asignado final requiere revisión técnica independiente por parte del consultor especialista.
+
+    La validación consiste en comparar los valores calculados por CALAIRE-APP con un cálculo manual de referencia, siguiendo la metodología del Suplemento 1 de la GUM (JCGM 101) y la cláusula 7 de ISO 13528:2017.
+  </Accordion>
+
+  <Accordion title="Algoritmo A — Método robusto iterativo" icon="rotate" defaultOpen={false}>
+    El Algoritmo A es el método robusto iterativo descrito en el Anexo C de ISO 13528:2017 para calcular la media robusta (`x*`) y la desviación estándar robusta (`s*`) de los resultados de los participantes.
+
+    **Procedimiento del Algoritmo A (ISO 13528 Anexo C):**
+
+    1. Inicializar: `x* = median(xᵢ)`, `s* = 1.2583 × nIQR`.
+    2. Definir `δ = 1.5 × s*`.
+    3. Actualizar cada resultado: `xᵢ* = max(x* - δ, min(xᵢ, x* + δ))`.
+    4. Recalcular: `x* = mean(xᵢ*)`, `s* = 1.134 × std(xᵢ*)`.
+    5. Repetir hasta convergencia (`|Δx*| < 0.001 × s*`).
+
+    El módulo está implementado en `ptcalc` pero la convergencia y los resultados para los conjuntos de datos de las rondas piloto (CO, NOx, SO₂, O₃) aún no han sido verificados formalmente.
+  </Accordion>
+
+  <Accordion title="Compatibilidad metrológica" icon="link" defaultOpen={false}>
+    La compatibilidad metrológica evalúa si dos resultados de medición son estadísticamente compatibles, considerando sus incertidumbres expandidas. Se basa en el número En definido en ISO 13528:2017 y la cláusula 7.7 del VIM (JCGM 200:2012).
+
+    **Criterio:** dos resultados son compatibles cuando el valor absoluto de su diferencia es menor que la raíz de la suma cuadrática de sus incertidumbres expandidas combinadas.
+
+    La implementación requiere que el laboratorio participante reporte su incertidumbre expandida junto con el resultado, lo cual aún no ha sido verificado en el flujo de datos del aplicativo.
+  </Accordion>
+
+  <Accordion title="Puntuaciones de desempeño: z, z', zeta, En" icon="chart-line" defaultOpen={false}>
+    El módulo de puntuaciones de desempeño asigna a cada participante una puntuación normalizada que indica su nivel de acuerdo con el valor asignado de la ronda.
+
+    | Puntuación | Fórmula | Descripción |
+    |---|---|---|
+    | z | `(xᵢ - X) / σ_p` | Puntuación estándar; σ_p sin incertidumbre |
+    | z' | `(xᵢ - X) / √(σ_p² + u_ref²)` | Corregida por incertidumbre del valor asignado |
+    | zeta | `(xᵢ - X) / √(uᵢ² + u_ref²)` | Basada en incertidumbre del participante |
+    | En | `(xᵢ - X) / √(Uᵢ² + U_ref²)` | Usa incertidumbre expandida (k=2) |
+
+    **Criterios de interpretación:**
+    - `|z| ≤ 2.0`: resultado satisfactorio.
+    - `2.0 < |z| ≤ 3.0`: resultado cuestionable (señal de alerta).
+    - `|z| > 3.0`: resultado insatisfactorio (acción requerida).
+
+    La implementación en `ptcalc` está en revisión, en particular la gestión de los casos en los que el laboratorio no reporta incertidumbre (aplicable a z' y En).
+  </Accordion>
+</AccordionGroup>

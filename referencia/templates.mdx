@@ -1,0 +1,228 @@
+---
+title: "Templates disponibles en el grafo Logseq CALAIRE-EA"
+description: "Guía de los cinco templates disponibles en el grafo CALAIRE-EA: cómo insertar cada uno y qué estructura y propiedades incluye cada plantilla."
+---
+
+El grafo CALAIRE-EA incluye cinco templates predefinidos en `pages/templates.md` que estandarizan la creación de reuniones, protocolos técnicos, rondas piloto, entregables y entradas de diario. Usar los templates garantiza que todos los registros tengan las propiedades correctas para que aparezcan en las consultas automáticas del grafo.
+
+## Cómo usar los templates
+
+En Logseq, los templates se insertan con el comando `/template` seguido del nombre del template. El comando despliega un selector con todos los templates disponibles.
+
+<Steps>
+  <Step title="Abrir el bloque de destino">
+    Crea un bloque vacío en la página o diario donde deseas insertar el template. Coloca el cursor en ese bloque.
+  </Step>
+  <Step title="Invocar el comando">
+    Escribe `/template` y selecciona el template deseado del menú desplegable. También puedes escribir el nombre directamente después de `/template` para filtrar.
+  </Step>
+  <Step title="Completar las propiedades">
+    El template se inserta con propiedades vacías. Completa cada propiedad (fecha, asistentes, estado, etc.) antes de guardar.
+  </Step>
+</Steps>
+
+<Note>
+No elimines ni modifiques las líneas `template::` dentro de `pages/templates.md`. Esas declaraciones son las que Logseq reconoce para registrar el template en su índice interno.
+</Note>
+
+## Templates disponibles
+
+| Nombre del template | Comando | Propósito |
+|---|---|---|
+| `journal-daily` | `/template journal-daily` | Estructura estándar para entradas diarias de diario |
+| `reunion` | `/template reunion` | Acta de reunión con asistentes, decisiones y acciones |
+| `protocolo` | `/template protocolo` | Protocolo técnico de prueba de gases contaminantes |
+| `ronda-piloto` | `/template ronda-piloto` | Seguimiento de logística y resultados por laboratorio/semana |
+| `entregable` | `/template entregable` | Entregable de proyecto con plazo y criterios de aceptación |
+
+## Detalle de cada template
+
+<AccordionGroup>
+
+  <Accordion title="journal-daily — Diario estándar">
+    Inserta la estructura completa del diario diario con las cinco categorías temáticas estándar, todas colapsadas por defecto para una vista limpia.
+
+    **Propiedades del template:**
+
+    | Propiedad | Valor |
+    |---|---|
+    | `project::` | `[[CALAIRE-EA]]` |
+    | `collapsed::` | `true` (por sección) |
+
+    **Estructura completa:**
+
+    ```markdown
+    # Registro del Día
+      project:: [[CALAIRE-EA]]
+    - ## Prueba Piloto
+      collapsed:: true
+    	- 
+    - ## Gestión Administrativa
+      collapsed:: true
+    	- 
+    - ## Desarrollo Técnico
+      collapsed:: true
+    	- 
+    - ## SGC / Calidad
+      collapsed:: true
+    	- 
+    - ## Infraestructura
+      collapsed:: true
+    	- 
+    ```
+
+    **Instrucciones de uso:** ejecutar `/template journal-daily` en el archivo de diario del día. Eliminar las secciones que no apliquen para esa jornada. Cada evento se documenta dentro de la sección temática correspondiente con la sintaxis `**Título del Evento:** descripción` y las propiedades `date::`, `category::` y `status::`.
+  </Accordion>
+
+  <Accordion title="reunion — Acta de reunión">
+    Genera la estructura de un acta de reunión formal con asistentes, temas discutidos, decisiones tomadas y acciones de seguimiento.
+
+    **Propiedades del template:**
+
+    | Propiedad | Descripción |
+    |---|---|
+    | `type::` | `[[Meeting]]` (fijo) |
+    | `attendees::` | Lista de asistentes (completar) |
+    | `project::` | `[[CALAIRE-EA]]` (fijo) |
+    | `date::` | Fecha de la reunión en formato `YYYY-MM-DD` |
+
+    **Estructura completa:**
+
+    ```markdown
+    - #[[Reunión]]
+      type:: [[Meeting]]
+      attendees:: 
+      project:: [[CALAIRE-EA]]
+      date:: 
+      - **Temas Discutidos**
+        - 
+      - **Decisiones**
+        - #decision 
+      - **Acciones**
+        - TODO 
+    ```
+
+    **Instrucciones de uso:**
+    1. Crear el bloque `[[Reunión: Tema de la reunión]]` en el diario o en una página.
+    2. Navegar a la nueva página creada por ese enlace.
+    3. Aplicar el template `reunion`.
+    4. Completar asistentes, fecha y contenido de las secciones.
+
+    <Tip>
+    Las acciones de seguimiento deben incluir `project:: [[CALAIRE-EA]]` y `deadline::` para que aparezcan en la consulta de tareas del diario.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="protocolo — Protocolo técnico de gas">
+    Genera la estructura de un protocolo técnico para documentar pruebas de gases contaminantes criterio (CO, NOx, SO2, O3).
+
+    **Propiedades del template:**
+
+    | Propiedad | Descripción |
+    |---|---|
+    | `type::` | `[[Protocolo]]` (fijo) |
+    | `gas::` | Gas analizado: `CO`, `NOx`, `SO2` u `O3` |
+    | `version::` | Versión del protocolo (por defecto `1.0`) |
+    | `status::` | Estado: `#borrador`, `#aprobado`, `#vigente` |
+
+    **Estructura completa:**
+
+    ```markdown
+    - #[[Protocolo]]
+      type:: [[Protocolo]]
+      gas:: 
+      version:: 1.0
+      status:: #borrador
+      - **Objetivo**
+        - 
+      - **Procedimiento**
+        - 
+      - **Criterios de Aceptación**
+        - 
+    ```
+
+    **Instrucciones de uso:** crear la página del protocolo en `pages/` con el formato `Protocolo [Gas] v[N].md`. Aplicar el template y completar cada sección. Cambiar `status::` a `#aprobado` una vez revisado por el equipo técnico.
+  </Accordion>
+
+  <Accordion title="ronda-piloto — Seguimiento por laboratorio">
+    Documenta la logística y los resultados analíticos de una ronda de ensayo de aptitud para un laboratorio participante en una semana específica.
+
+    **Propiedades del template:**
+
+    | Propiedad | Descripción |
+    |---|---|
+    | `type::` | `[[Ronda Piloto]]` (fijo) |
+    | `laboratorio::` | Nombre del laboratorio participante |
+    | `week::` | Semana de la ronda (ej. `Semana 1`, `Ronda 3`) |
+    | `reception-date::` | Fecha de recepción del equipo (`YYYY-MM-DD`) |
+    | `return-date::` | Fecha de devolución del equipo (`YYYY-MM-DD`) |
+
+    **Estructura completa:**
+
+    ```markdown
+    - #[[Ronda Piloto]]
+      type:: [[Ronda Piloto]]
+      laboratorio:: 
+      week:: 
+      reception-date:: 
+      return-date:: 
+      - **Equipos**
+        - 
+      - **Resultados**
+        - CO:: 
+        - NOx:: 
+        - SO2:: 
+        - O3:: 
+      - **Observaciones**
+        - 
+    ```
+
+    **Instrucciones de uso:** crear una página por laboratorio y ronda en `pages/`. Registrar los resultados analíticos para cada gas en la sección **Resultados**. Documentar cualquier incidencia logística en **Observaciones**.
+  </Accordion>
+
+  <Accordion title="entregable — Hito con plazo y criterios">
+    Documenta un entregable del proyecto con su fecha límite, estado y los criterios de aceptación que deben verificarse antes de marcar el entregable como completado.
+
+    **Propiedades del template:**
+
+    | Propiedad | Descripción |
+    |---|---|
+    | `type::` | `[[Entregable]]` (fijo) |
+    | `deadline::` | Fecha límite en formato `YYYY-MM-DD` |
+    | `status::` | Estado: `#pendiente`, `#en_revision`, `#aprobado` |
+    | `phase::` | Fase contractual del proyecto |
+
+    **Estructura completa:**
+
+    ```markdown
+    - #[[Entregable]]
+      type:: [[Entregable]]
+      deadline:: 
+      status:: #pendiente
+      phase:: 
+      - **Descripción**
+        - 
+      - **Criterios de Aceptación**
+        - 
+    ```
+
+    **Instrucciones de uso:** crear la página del entregable en `pages/` con el nombre del hito. Completar la descripción y los criterios de aceptación. Actualizar `status::` a medida que avanza la revisión. Enlazar el entregable desde el MOC `[[CALAIRE-EA]]` y desde `[[Gestión del Proyecto]]`.
+  </Accordion>
+
+</AccordionGroup>
+
+## Patrón general de propiedades
+
+Todos los templates siguen el mismo patrón: el bloque principal lleva una etiqueta de tipo (`#[[Tipo]]`) y las propiedades se escriben en líneas separadas debajo del bloque.
+
+```markdown
+- #[[TipoDeBloque]]
+  type:: [[TipoDeBloque]]
+  project:: [[CALAIRE-EA]]
+  date:: YYYY-MM-DD
+  status:: valor
+```
+
+<Warning>
+No modificar las declaraciones `template:: nombre` que aparecen dentro de `pages/templates.md`. Son las que Logseq usa para indexar los templates y si se eliminan o renombran el comando `/template` dejará de encontrarlos.
+</Warning>

@@ -1,0 +1,123 @@
+---
+title: "Protocolos técnicos por gas contaminante"
+description: "Estado y contenido de los protocolos técnicos en fase borrador para CO, NOx, SO2 y O3 en el programa de ensayos de aptitud CALAIRE-EA, y documentación complementaria requerida."
+---
+
+Los protocolos técnicos por gas contaminante son los documentos operativos que especifican, para cada mensurando, los procedimientos de medición, los criterios de calibración y trazabilidad, las pruebas de homogeneidad y estabilidad del ítem de ensayo, y las contingencias estadísticas aplicables durante la ronda de EA. En el proyecto CALAIRE-EA se requiere un protocolo independiente para cada uno de los cuatro gases contaminantes criterio: CO, NOx, SO2 y O3. Esta página describe el propósito, el alcance esperado y el estado actual de cada protocolo, así como la documentación complementaria registrada bajo el código F-GCM-03.
+
+## Estado de los protocolos
+
+<Warning>
+Todos los protocolos técnicos por gas se encuentran en fase **borrador**. Deben ser completados, revisados y aprobados antes de proceder con las rondas piloto formales. El inicio de las rondas sin protocolos aprobados comprometería la trazabilidad documental del SGC y el cumplimiento de ISO/IEC 17043:2023.
+</Warning>
+
+| Protocolo | Código referencial | Estado |
+|---|---|---|
+| Protocolo Técnico CO | P-PSEA-03 | Borrador |
+| Protocolo Técnico NOx | P-PSEA-02 | Borrador |
+| Protocolo Técnico SO2 | P-PSEA-05 | Borrador |
+| Protocolo Técnico O3 | P-PSEA-04 | Borrador |
+
+## Contenido estándar de cada protocolo
+
+Cada protocolo técnico desarrolla, para su gas específico, los siguientes componentes en alineación con el Protocolo General EA (P-PSEA-01) y los requisitos de ISO 17043:2023 e ISO 13528:2017:
+
+- **Metodología de medición**: principio físico-químico del analizador de referencia, rango de concentración y niveles del ítem de ensayo.
+- **Preparación del ítem de ensayo**: generación dinámica de concentraciones (dilución desde cilindro MCR para CO/NOx/SO2; fotómetro nivel 2 para O3), configuración del manifold de distribución y verificación de fugas.
+- **Criterios de homogeneidad y estabilidad**: verificación cuantitativa conforme a ISO 13528:2017, Anexo B (ss ≤ 0.3σpt para homogeneidad).
+- **Calibración y trazabilidad metrológica**: procedimientos de calibración multipunto, verificación de cero y span, y documentación de la cadena de trazabilidad.
+- **Métodos estadísticos específicos**: parámetros a y b para el cálculo de σpt por interpolación lineal según el nivel de concentración del gas.
+- **Criterios de desempeño**: umbrales de aceptación para puntuaciones z, z′, ζ y En.
+- **Contingencias y acciones correctivas**: procedimientos ante falla instrumental, valores atípicos o incumplimiento de criterios de homogeneidad.
+
+## Protocolos por gas
+
+<Tabs>
+  <Tab title="CO — Monóxido de carbono">
+    El protocolo técnico para monóxido de carbono (CO) cubre el diseño del ítem de ensayo mediante dilución dinámica a partir de un cilindro de mezcla de gas trazable. Los niveles de concentración se seleccionan en el rango de relevancia para la vigilancia de calidad del aire urbano en Colombia.
+
+    **Aspectos clave del protocolo CO:**
+
+    - Generación del ítem de ensayo por dilución desde cilindro MCR con aire cero certificado.
+    - Mínimo 5 niveles de concentración más un nivel cero, con duración de 2 horas por nivel y 1 hora para el cero.
+    - Cálculo de σpt mediante interpolación lineal con parámetros a y b específicos para CO acordados por laboratorios de referencia.
+    - Verificación de homogeneidad y estabilidad del ítem antes del inicio del EA.
+    - Documentación de resultados y carga en CALAIRE-APP para cálculo de puntuaciones de desempeño.
+
+    **Estado:** Borrador (F-GCM-03)
+
+    <Note>
+    El protocolo CO es referenciado como P-PSEA-03 en el sistema documental del SGC. Su aprobación es prerrequisito para la inclusión del CO en las rondas piloto.
+    </Note>
+  </Tab>
+
+  <Tab title="NOx — Óxidos de nitrógeno">
+    El protocolo técnico para óxidos de nitrógeno (NOx = NO + NO2) contempla la evaluación conjunta de ambas especies dado que los analizadores de vigilancia de calidad del aire habitualmente miden el par NO/NO2. El ítem de ensayo se genera por dilución dinámica desde cilindro MCR.
+
+    **Aspectos clave del protocolo NOx:**
+
+    - Generación del ítem de ensayo por dilución desde cilindro MCR con concentraciones de NO y NO2.
+    - Evaluación individual de NO y NO2 con sus respectivos parámetros σpt (a y b por especie).
+    - Mínimo 5 niveles de concentración por especie más nivel cero.
+    - Criterios de selección de participantes: preferencia a sistemas de vigilancia que operen analizadores de NOx por quimioluminiscencia.
+    - Carga de resultados por participante en CALAIRE-APP con distinción de especie.
+
+    **Estado:** Borrador (F-GCM-03)
+
+    <Note>
+    El protocolo NOx es referenciado como P-PSEA-02 en el sistema documental del SGC. Incluye la evaluación de ambas especies (NO y NO2) en una misma ronda de EA.
+    </Note>
+  </Tab>
+
+  <Tab title="SO2 — Dióxido de azufre">
+    El protocolo técnico para dióxido de azufre (SO2) sigue la misma estructura de generación dinámica por dilución. El SO2 presenta características de adsorción en líneas de muestreo que requieren consideraciones específicas de inercia de materiales en el manifold de distribución.
+
+    **Aspectos clave del protocolo SO2:**
+
+    - Generación del ítem de ensayo por dilución desde cilindro MCR; uso exclusivo de materiales inertes (vidrio, teflón) en el manifold para evitar pérdidas por adsorción.
+    - Verificación de estabilidad del ítem con especial atención a la adsorción en superficies.
+    - Mínimo 5 niveles de concentración más nivel cero.
+    - Parámetros a y b para σpt específicos de SO2.
+    - Criterios de limpieza y acondicionamiento del manifold antes de cada ronda.
+
+    **Estado:** Borrador (F-GCM-03)
+
+    <Note>
+    El protocolo SO2 es referenciado como P-PSEA-05 en el sistema documental del SGC. La naturaleza reactiva del SO2 implica requisitos adicionales de verificación de la integridad del sistema de distribución.
+    </Note>
+  </Tab>
+
+  <Tab title="O3 — Ozono">
+    El protocolo técnico para ozono (O3) difiere de los demás en la generación del ítem de ensayo: se utiliza un fotómetro de ozono nivel 2 como referencia primaria en lugar de un cilindro MCR, dado que el ozono no puede almacenarse en cilindros a las concentraciones de interés con estabilidad suficiente.
+
+    **Aspectos clave del protocolo O3:**
+
+    - Generación dinámica del ítem de ensayo mediante generador de ozono con fotómetro nivel 2 como referencia.
+    - CALAIRE es **Instituto Designado para Ozono** (Resolución 263/2023), lo que le habilita como referente metrológico nacional para este gas.
+    - El venteo del manifold debe dirigirse a un destructor de ozono para evitar exposición del personal.
+    - Cuando n < 5 participantes, se usa el valor del fotómetro nivel 2 directamente como valor asignado, con σpt predeterminado.
+    - Parámetros a y b para σpt específicos de O3.
+    - Evaluación de desempeño con puntuaciones z′ o En según la incertidumbre del valor asignado.
+
+    **Estado:** Borrador (F-GCM-03)
+
+    <Note>
+    El protocolo O3 es referenciado como P-PSEA-04 en el sistema documental del SGC. Es el único protocolo donde la designación institucional de CALAIRE (Resolución 263/2023) tiene implicación directa en la generación del valor de referencia.
+    </Note>
+  </Tab>
+</Tabs>
+
+## Documentación complementaria requerida (F-GCM-03)
+
+Además de los cuatro protocolos técnicos por gas, el control documental F-GCM-03 registra dos documentos complementarios pendientes:
+
+| Documento | Propósito | Estado |
+|---|---|---|
+| Manual de Transporte de Equipos (I-PSEA-01) | Instructivo de embalaje, transporte y desembalaje de los analizadores y equipos auxiliares de los participantes. Se distribuye con la invitación formal al EA. | Pendiente |
+| Actualización Portafolio de Servicios | Documento comercial que describe el servicio de EA ofrecido por CALAIRE, condiciones de participación, costos y alcance por gas contaminante. | Pendiente |
+
+<Info>
+El Manual de Transporte de Equipos (I-PSEA-01) es un entregable operativo crítico: se adjunta a la comunicación formal de invitación (DG-PSEA-01) para que los participantes puedan preparar el despacho de sus instrumentos con antelación suficiente.
+</Info>
+
+Para el marco normativo que rige estos protocolos, consulte [Normas ISO aplicadas en CALAIRE-EA](/qms/normas-iso). Para la visión general del SGC y el estado de auditorías, consulte [Sistema de Gestión de Calidad — visión general](/qms/overview).

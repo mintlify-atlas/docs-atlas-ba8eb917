@@ -1,0 +1,97 @@
+---
+title: "Laboratorios participantes en CALAIRE-EA"
+description: "Registro de laboratorios en el esquema CALAIRE-EA: estado de confirmación, asignación por ronda, equipos disponibles y proceso de incorporación al programa."
+---
+
+El registro de laboratorios participantes es el instrumento central de trazabilidad del esquema CALAIRE-EA. Consolida la información de cada institución que ha sido invitada, contactada o que ha confirmado su participación en alguna de las rondas de Ensayo de Aptitud para Gases Contaminantes Criterio. La gestión de este registro permite planificar la secuenciación de rondas, asignar posiciones de participante (P1, P2…) y coordinar la logística de equipos con anticipación suficiente.
+
+## Categorías de estado
+
+| Estado | Significado |
+|---|---|
+| `confirmed` | Ha confirmado participación explícita en una o más rondas |
+| `contacted` | Ha recibido carta u invitación oficial; respuesta pendiente |
+| `candidate` | Figura en la lista de posibles participantes; no ha recibido invitación formal |
+| `inactive` | Participó anteriormente pero no está asignado a las rondas activas |
+
+## Estado actual de laboratorios
+
+| Laboratorio | Estado | Posición piloto | Ronda 7 | Ronda 8 |
+|---|---|---|---|---|
+| SIATA | Candidato (pendiente conf. formal) | P1 | Planificada | Planificada |
+| Universidad Pontificia Bolivariana (Gelima) | Confirmado | P2 | — | Planificada |
+| Universidad de Medellín | Confirmado (MOC) | — | — | — |
+| Politécnico Colombiano Jaime Isaza Cadavid | Candidato | — | — | — |
+
+<Warning>
+SIATA figura en el MOC como candidato (`status:: candidate`) a pesar de estar asignado operativamente como P1 en ambas rondas del piloto. La confirmación formal de disponibilidad es una tarea de alta prioridad con fecha límite **10 de abril de 2026**.
+</Warning>
+
+## Perfiles de laboratorio
+
+<CardGroup cols={2}>
+  <Card title="SIATA" icon="building">
+    **Institución:** Área Metropolitana del Valle de Aburrá  
+    **Sede:** Medellín  
+    **Posición:** P1 (ambas rondas)  
+    **Analitos asignados:** CO/SO₂ (Ronda 7), O₃/NO/NO₂ (Ronda 8)  
+    **Estado:** Candidato — pendiente confirmación formal
+  </Card>
+  <Card title="Universidad Pontificia Bolivariana — Gelima" icon="flask">
+    **Institución:** Universidad Pontificia Bolivariana  
+    **Sede:** Medellín  
+    **Posición:** P2 (ronda doble)  
+    **Analitos asignados:** O₃/NO/NO₂ (Ronda 8)  
+    **Estado:** Confirmado — carta oficial enviada y respuesta recibida
+  </Card>
+  <Card title="Universidad de Medellín" icon="school">
+    **Institución:** Universidad de Medellín  
+    **Sede:** Medellín  
+    **Estado:** Confirmado en MOC Laboratorios  
+    **Participación piloto:** No asignada a Ronda 7 ni Ronda 8  
+    **Nota:** Participó en Rondas 3 y 4 del calendario previo
+  </Card>
+  <Card title="Politécnico Colombiano Jaime Isaza Cadavid" icon="microscope">
+    **Institución:** Politécnico Colombiano Jaime Isaza Cadavid  
+    **Sede:** Medellín  
+    **Estado:** Candidato  
+    **Participación piloto:** No asignada  
+    **Nota:** Pendiente de invitación formal y definición de ronda
+  </Card>
+</CardGroup>
+
+## Estructura de página por laboratorio
+
+Cada laboratorio en el registro cuenta con su propia página individual. La estructura estándar incluye las siguientes secciones:
+
+| Sección | Contenido |
+|---|---|
+| Propiedades de página | `type`, `status`, `institution`, `location` |
+| Participación en Rondas EA | Lista de rondas con estado (`confirmed`, `pending`, `planned`, `cancelled`) |
+| Equipos | Analizadores de gases disponibles por analito |
+| Observaciones | Historial de comunicaciones, contingencias y decisiones relevantes |
+| Documentación | Cartas de invitación, protocolos suscritos, certificados |
+
+## Cómo incorporar un nuevo laboratorio
+
+<Steps>
+  <Step title="Crear la página del laboratorio">
+    Crear un archivo en `pages/` con el nombre oficial de la institución (formato: `Nombre del Laboratorio.md`). Aplicar la plantilla estándar de laboratorio con todas las propiedades requeridas.
+  </Step>
+  <Step title="Asignar estado inicial">
+    Establecer `status:: candidate` al momento de la creación. Actualizar a `contacted` una vez enviada la carta de invitación oficial, y a `confirmed` al recibir respuesta positiva.
+  </Step>
+  <Step title="Registrar en el MOC Laboratorios">
+    Agregar el enlace `[[Nombre del Laboratorio]]` bajo la categoría de estado correspondiente en `pages/Laboratorios.md`.
+  </Step>
+  <Step title="Vincular con la Prueba Piloto">
+    Si el laboratorio es asignado a una ronda activa, actualizar `pages/Prueba Piloto.md` con la confirmación de posición (P1, P2…) y la ronda correspondiente.
+  </Step>
+  <Step title="Actualizar la ronda asignada">
+    Registrar al laboratorio en la página de la ronda correspondiente (p. ej., `pages/Ronda 7.md`) bajo el campo `Participante` o `Participantes`.
+  </Step>
+</Steps>
+
+<Info>
+Para el seguimiento de confirmaciones por ronda, la fuente de verdad operativa es el MOC de la Prueba Piloto. El registro de Laboratorios conserva el historial completo de participación de cada institución a lo largo de todas las rondas del programa.
+</Info>

@@ -1,97 +1,60 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "CALAIRE-EA: Ensayos de Aptitud para Gases Contaminantes"
+description: "Sistema de gestión del Proyecto 61134 — implementación de proficiency testing para CO, NOx, SO2 y O3 en Colombia bajo ISO 17043 y ISO 13528."
 ---
 
-## Setting up
+CALAIRE-EA (Proyecto 61134) es el sistema de gestión del conocimiento para la implementación de Ensayos de Aptitud (EA) para gases contaminantes criterio en Colombia. El proyecto, ejecutado conjuntamente por el INM y la Universidad Nacional de Colombia (UNAL), cubre desde el diseño metodológico del servicio hasta la ejecución de la prueba piloto con laboratorios participantes, con trazabilidad completa bajo las normas ISO 17043:2023, ISO 13528:2017 y NTC ISO/IEC 17025:2017.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Visión general del proyecto" icon="flask" href="/introduccion">
+    Objetivos, alcance vigente, inversión y estructura del Proyecto 61134.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Estructura contractual" icon="file-contract" href="/estructura-contractual">
+    Los tres contratos del proyecto: Contrato 1, Contrato APP y Contrato 2.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Prueba Piloto" icon="microscope" href="/prueba-piloto/overview">
+    Coordinación operativa de rondas con laboratorios (Abril–Mayo 2026).
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="CALAIRE-APP" icon="chart-bar" href="/calaire-app/overview">
+    Aplicativo estadístico en R/Shiny para análisis de resultados ISO 13528.
   </Card>
-</Columns>
+  <Card title="Gestión de Calidad" icon="shield-check" href="/qms/overview">
+    Sistema de gestión de calidad, normas ISO y protocolos técnicos por gas.
+  </Card>
+  <Card title="Herramientas" icon="wrench" href="/herramientas/export-tareas">
+    Exportador de tareas a CSV y alertas automáticas vía Google Sheets.
+  </Card>
+</CardGroup>
 
-## Create beautiful pages
+## Estado del proyecto
 
-Everything you need to create world-class documentation.
+El proyecto se encuentra en la **Etapa 2 (Contrato 2, 2026)**: alistamiento previo, ejecución de la prueba piloto con laboratorios participantes y consolidación del diseño del servicio de Ensayos de Aptitud.
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+<CardGroup cols={3}>
+  <Card title="Contrato 1" icon="circle-check">
+    **Completado** — Estado del arte, protocolos por gas y avance documental SGC.
   </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
+  <Card title="Contrato APP" icon="circle-check">
+    **Completado** — CALAIRE-APP: aplicativo R/Shiny para evaluación ISO 13528.
   </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
+  <Card title="Contrato 2" icon="rotate">
+    **En progreso** — Prueba piloto Abril–Mayo 2026 con SIATA y UPB.
   </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+</CardGroup>
 
-## Need inspiration?
+## Cómo navegar esta documentación
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+<Steps>
+  <Step title="Entiende el proyecto">
+    Lee la [Introducción](/introduccion) y la [Estructura Contractual](/estructura-contractual) para comprender el alcance, los hitos y los entregables del Proyecto 61134.
+  </Step>
+  <Step title="Sigue la Prueba Piloto">
+    Consulta la sección [Prueba Piloto](/prueba-piloto/overview) para el estado de las rondas, los laboratorios participantes y la logística operativa.
+  </Step>
+  <Step title="Trabaja con las herramientas">
+    Usa el [exportador de tareas](/herramientas/export-tareas) para generar reportes CSV desde Logseq, y configura las [alertas automáticas](/herramientas/alertas-google-sheets) en Google Sheets.
+  </Step>
+  <Step title="Consulta la referencia">
+    Revisa las [convenciones](/referencia/convenciones) del grafo y los [templates disponibles](/referencia/templates) para mantener consistencia en el registro diario.
+  </Step>
+</Steps>

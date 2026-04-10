@@ -1,0 +1,95 @@
+{
+  "projectType": "general",
+  "projectName": "CALAIRE-EA",
+  "projectDescription": "Sistema de gestión del conocimiento para el Proyecto 61134: Implementación de Ensayos de Aptitud para Gases Contaminantes Criterio en Colombia, que abarca coordinación técnica, prueba piloto, software estadístico (CALAIRE-APP) y gestión de calidad ISO 17043/13528.",
+  "theme": "palm",
+  "primaryColor": "#1E6B8A",
+  "lightColor": "#E8F4F8",
+  "darkColor": "#0D3D52",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Proyecto",
+        "groups": [
+          {
+            "group": "Introducción",
+            "pages": [
+              "introduccion",
+              "estructura-contractual",
+              "equipo"
+            ]
+          },
+          {
+            "group": "Prueba Piloto",
+            "pages": [
+              "prueba-piloto/overview",
+              "prueba-piloto/rondas",
+              "prueba-piloto/laboratorios",
+              "prueba-piloto/logistica"
+            ]
+          },
+          {
+            "group": "CALAIRE-APP",
+            "pages": [
+              "calaire-app/overview",
+              "calaire-app/modulos-estadisticos",
+              "calaire-app/validacion"
+            ]
+          },
+          {
+            "group": "Gestión de Calidad",
+            "pages": [
+              "qms/overview",
+              "qms/normas-iso",
+              "qms/protocolos-tecnicos"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Herramientas",
+        "groups": [
+          {
+            "group": "Sistema de Seguimiento",
+            "pages": [
+              "herramientas/export-tareas",
+              "herramientas/alertas-google-sheets",
+              "herramientas/logseq-graph"
+            ]
+          },
+          {
+            "group": "Referencia",
+            "pages": [
+              "referencia/convenciones",
+              "referencia/templates",
+              "referencia/clasificacion-correos",
+              "referencia/faq"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Gestión del conocimiento en Logseq (grafo de páginas interconectadas)",
+    "Coordinación operativa de rondas de Ensayo de Aptitud (EA) con laboratorios colombianos",
+    "CALAIRE-APP: software estadístico en R/Shiny para análisis ISO 13528",
+    "Sistema de exportación de tareas Logseq a CSV con alertas automáticas por email",
+    "Trazabilidad triple contractual (Contrato 1, Contrato APP, Contrato 2)",
+    "Gestión de calidad bajo normas ISO 17043:2023, ISO 13528:2017 y NTC ISO/IEC 17025:2017",
+    "Registro de laboratorios participantes con seguimiento por ronda",
+    "Bitácora diaria estructurada por categorías temáticas"
+  ],
+  "publicApiSurface": [
+    "python tools/export_tareas.py — extrae tareas TODO/DOING/DONE del grafo a CSV",
+    "python tools/export_tareas.py --output <archivo.csv> — especifica archivo de salida",
+    "python tools/export_tareas.py --pages <dir> --journals <dir> — rutas personalizadas",
+    "alertas_tareas.gs / configurarTrigger() — configura trigger diario de alertas en Google Sheets",
+    "alertas_tareas.gs / testAlertas() — prueba manual del sistema de alertas",
+    "alertas_tareas.gs / estadisticas() — muestra estadísticas de tareas en la hoja",
+    "Logseq template: journal-daily — estructura estandarizada para registros diarios",
+    "Logseq template: reunion — actas de reunión con asistentes y decisiones",
+    "Logseq template: protocolo — documentación técnica de gases (CO, NOx, SO2, O3)",
+    "Logseq template: ronda-piloto — seguimiento de logística y resultados por laboratorio"
+  ]
+}

@@ -1,0 +1,211 @@
+---
+title: "Grafo Logseq CALAIRE-EA: estructura y navegación"
+description: "Organización del grafo Logseq CALAIRE-EA: directorios, MOCs de entrada, formato del journal diario, flujo TODO→DONE y consultas automáticas de tareas."
+---
+
+Logseq es un editor de notas local, basado en bloques y orientado a grafos, que CALAIRE-EA usa como sistema central de gestión del conocimiento y seguimiento del proyecto. El grafo almacena entradas diarias, páginas permanentes de referencia, documentos técnicos y tareas, todos interconectados mediante enlaces bidireccionales. Esta página describe cómo está organizado el grafo, los puntos de entrada principales, el formato del journal y la forma de navegar entre contenidos.
+
+## Estructura de directorios
+
+El grafo tiene la siguiente estructura en el sistema de archivos:
+
+```text
+/                          # Raíz del grafo
+├── journals/              # Entradas diarias (formato YYYY_MM_DD.md)
+├── pages/                 # Notas permanentes, MOCs, plantillas
+├── docs/                  # Documentación externa y referencias
+│   ├── pm/                # Artefactos PMI (Project Charter, EDT, etc.)
+│   ├── instrucciones/     # Guías de gestión de proyecto
+│   ├── auxiliares/        # CSVs operativos, Gantt, calendarios
+│   └── docs_sgc/          # Sistema de Gestión de Calidad
+├── ref/                   # Referencias del sistema (guías de Logseq)
+├── tools/                 # Scripts de exportación y alertas
+└── logseq/                # Configuración interna de Logseq
+    ├── config.edn          # Ajustes del grafo, consultas, macros
+    └── custom.css          # Estilos personalizados
+```
+
+<Info>
+  El directorio `tools/` no es parte de la configuración de Logseq; contiene los scripts Python y Apps Script del sistema de seguimiento de tareas documentado en las otras páginas de esta sección.
+</Info>
+
+## MOCs: puntos de entrada al grafo
+
+Los MOC (Maps of Content) son páginas de índice que agrupan enlaces a contenidos relacionados. Funcionan como punto de partida para navegar a cualquier área del proyecto sin depender de la búsqueda global.
+
+| MOC | Propósito |
+|-----|-----------|
+| `[[CALAIRE-EA]]` | Vista general del proyecto: fases, hitos, enlaces a todas las áreas |
+| `[[Prueba Piloto]]` | Coordinación de la prueba piloto (laboratorios, rondas, calendario) |
+| `[[CALAIRE-APP]]` | Desarrollo del software estadístico (algoritmos, validación, entregas) |
+| `[[QMS]]` | Sistema de gestión de calidad (ISO 17043, ISO 13528, documentos SGC) |
+| `[[Laboratorios]]` | Registro de laboratorios participantes y estado de confirmación |
+| `[[Equipo]]` | Directorio del equipo: roles, responsabilidades, contactos |
+| `[[Equipos]]` | Inventario de equipos de medición y activos de calibración |
+| `[[Gestión del Proyecto]]` | MOC central de artefactos PMI en `docs/instrucciones/` |
+
+<Tip>
+  Agrega los MOC principales a la barra de **Favoritos** de Logseq para acceder con un clic. En el panel izquierdo, haz clic con el botón derecho sobre el nombre de la página y selecciona "Agregar a favoritos".
+</Tip>
+
+## Journal diario
+
+El journal es el punto de entrada principal para registrar actividades. Cada archivo en `journals/` corresponde a un día con nombre en formato `YYYY_MM_DD.md`.
+
+<Tabs>
+  <Tab title="Estructura del journal">
+    Cada entrada sigue esta estructura estándar:
+
+    ```markdown
+    # Registro del Día
+      project:: [[CALAIRE-EA]]
+    - ## [Nombre de Sección]
+    	- **[Título del Evento]:** descripción técnica del evento, su
+    	  impacto y próximos pasos.
+    	  date:: YYYY-MM-DD
+    	  category:: [[Categoría]]
+    	  status:: valor
+    - ## Referencias
+    	- [[Página MOC Relevante]]
+    ```
+
+    Las secciones estándar del journal son:
+
+    | Sección | Contenido típico |
+    |---------|-----------------|
+    | `Gestión de Cronograma Prueba Piloto` | Cambios de fechas, actualizaciones de rondas |
+    | `Gestión de Participantes Prueba Piloto` | Confirmaciones de laboratorios, invitaciones |
+    | `Desarrollo Técnico` | CALAIRE-APP, hallazgos técnicos |
+    | `Gestión Administrativa` | Comunicaciones, trámites administrativos |
+    | `Infraestructura` | Equipos, instalaciones, espacio físico |
+    | `Aprendizajes y Decisiones` | Lecciones aprendidas, decisiones clave |
+    | `Referencias` | Siempre al final; enlaces a MOCs relevantes |
+  </Tab>
+  <Tab title="Propiedades de bloque">
+    Cada bloque de evento en el journal debe incluir estas propiedades:
+
+    | Propiedad | Formato | Valores posibles |
+    |-----------|---------|-----------------|
+    | `date::` | `YYYY-MM-DD` | Fecha del evento |
+    | `category::` | `[[Categoría]]` | `[[Prueba Piloto]]`, `[[Desarrollo Técnico]]`, `[[Gestión Administrativa]]` |
+    | `status::` | texto en minúsculas | `confirmed`, `pending`, `in_progress`, `in_review`, `completed`, `documented`, `cancelled` |
+
+    Ejemplo de bloque completo:
+
+    ```markdown
+    - **Confirmación UPB Gelima:** respuesta positiva recibida para
+      participación en Ronda 5 (8-13 de abril). Se actualiza el
+      calendario operativo.
+      date:: 2026-02-05
+      category:: [[Prueba Piloto]]
+      status:: confirmed
+    ```
+  </Tab>
+</Tabs>
+
+## Flujo de tareas: TODO → DOING → DONE
+
+Las tareas en el grafo siguen un flujo de tres estados. En Logseq, estos se asignan como prefijos al inicio del bloque:
+
+```markdown
+- TODO Revisar metodología de cálculo en CALAIRE-APP
+  project:: [[CALAIRE-APP]]
+  priority:: high
+  deadline:: 2026-03-15
+
+- DOING Preparar cartas de invitación para laboratorios Ronda 4
+  project:: [[CALAIRE-EA]]
+  priority:: medium
+  deadline:: 2026-03-10
+
+- DONE Validar planilla de resultados con César Yate
+  project:: [[CALAIRE-APP]]
+  deadline:: 2026-02-20
+```
+
+<Note>
+  Para que una tarea aparezca en las consultas automáticas del journal, debe incluir `project:: [[CALAIRE-EA]]` o una referencia a cualquier MOC del grafo. Las tareas sin enlace de proyecto pueden no ser visibles en las consultas.
+</Note>
+
+## Convenciones de idioma
+
+El grafo sigue convenciones mixtas de idioma según el tipo de contenido:
+
+| Tipo de contenido | Idioma | Ejemplo |
+|-------------------|--------|---------|
+| Prosa y títulos | Español | `## Gestión Administrativa` |
+| Propiedades de bloque | Inglés | `priority::`, `deadline::`, `status::` |
+| Referencias de página | Español | `[[Prueba Piloto]]`, `[[CALAIRE-EA]]` |
+| Etiquetas de sistema | Inglés | `#decision`, `#MOC`, `#System` |
+
+## Navegación entre journal y MOCs
+
+El flujo de navegación típico parte del journal diario y llega a las páginas permanentes mediante enlaces bidireccionales:
+
+<Steps>
+  <Step title="Captura en el journal">
+    Registra el evento del día en el journal con su sección y propiedades. Incluye referencias a páginas relevantes con `[[Nombre de Página]]`.
+  </Step>
+  <Step title="Navega al MOC">
+    Haz clic en cualquier `[[enlace]]` para ir a la página correspondiente. Desde el MOC puedes ver el contexto completo del área de trabajo.
+  </Step>
+  <Step title="Explora las referencias vinculadas">
+    En la parte inferior de cada página, Logseq muestra automáticamente el panel de **Linked References**: todos los bloques del grafo que mencionan esa página. Esto crea el enlace bidireccional sin configuración adicional.
+  </Step>
+  <Step title="Registra decisiones con #decision">
+    Para decisiones clave, agrega la etiqueta `#decision` al bloque. Las consultas automáticas del journal las recogen y las muestran en el footer del día.
+  </Step>
+</Steps>
+
+## Sistema de consultas automáticas
+
+El archivo `logseq/config.edn` define dos consultas que aparecen automáticamente al pie de cada entrada de journal:
+
+| Consulta | Descripción |
+|----------|-------------|
+| `📋 CALAIRE-EA Tasks` | Muestra todas las tareas abiertas (`TODO` y `DOING`) vinculadas a `[[CALAIRE-EA]]` en cualquier página del grafo |
+| `🎯 Decisiones Recientes` | Muestra los bloques etiquetados con `#decision` de los últimos días |
+
+Estas consultas se ejecutan en tiempo real y reflejan el estado actual del grafo sin necesidad de actualización manual.
+
+<CodeGroup>
+
+```markdown Tarea vinculada al proyecto (visible en consultas)
+- TODO Actualizar protocolo de gases en CALAIRE-APP
+  project:: [[CALAIRE-EA]]
+  deadline:: 2026-04-01
+  priority:: high
+```
+
+```markdown Decisión registrada (visible en consultas)
+- #decision Se aprueba el uso de ISO 13528 Anexo C
+  para cálculo del índice z en la Ronda 3
+  date:: 2026-02-10
+  category:: [[QMS]]
+```
+
+```markdown Referencia de bloque entre páginas
+- Ver también: ((id-del-bloque-fuente))
+  collapsed:: true
+```
+
+</CodeGroup>
+
+## Plantillas disponibles
+
+Logseq permite insertar plantillas con el comando `/template`. Las plantillas del grafo CALAIRE-EA están definidas en `pages/templates.md`:
+
+| Plantilla | Comando | Uso |
+|-----------|---------|-----|
+| `reunion` | `/template reunion` | Acta de reunión con asistentes, discusión y decisiones |
+| `protocolo` | `/template protocolo` | Protocolo técnico para ensayos de gases |
+| `ronda-piloto` | `/template ronda-piloto` | Seguimiento de ronda por laboratorio |
+| `entregable` | `/template entregable` | Entregable con deadline y criterios de aceptación |
+
+## Convenciones de nombres de archivo
+
+| Directorio | Formato | Ejemplo |
+|-----------|---------|---------|
+| `journals/` | `YYYY_MM_DD.md` | `2026_01_30.md` |
+| `pages/` | Title Case con espacios | `Prueba Piloto.md` |
+| `docs/` | minúsculas_con_guiones_bajos | `iso_17043_2023.md` |

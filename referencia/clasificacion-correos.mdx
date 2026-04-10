@@ -1,0 +1,165 @@
+---
+title: "Clasificación de correos por categoría de proyecto"
+description: "10 grupos y 29 etiquetas Gmail para CALAIRE-EA con columna Categoria_Journal que mapea uno a uno cada correo a una categoría del diario Logseq."
+---
+
+El archivo `docs/auxiliares/tags_project.csv` define un sistema de etiquetas para clasificar los correos de Gmail del proyecto y mapearlos a las categorías del diario en el grafo Logseq. Esta clasificación garantiza trazabilidad completa entre las comunicaciones externas y los registros internos del proyecto CALAIRE-EA, facilitando el seguimiento de decisiones, entregables y operaciones técnicas.
+
+## Propósito del sistema
+
+Cada correo de Gmail relevante para CALAIRE-EA recibe una o más etiquetas del sistema definido en `tags_project.csv`. La columna `Categoria_Journal` de ese CSV indica a cuál de las cinco categorías del diario de Logseq corresponde cada etiqueta, permitiendo un flujo directo: **correo Gmail → etiqueta → categoría del journal → bloque de evento**.
+
+<Info>
+La regla de mapeo es **uno a uno**: cada etiqueta corresponde exactamente a una sola categoría del journal. Esto evita ambigüedad al momento de registrar eventos en el diario.
+</Info>
+
+## Archivo de referencia
+
+| Campo | Descripción |
+|---|---|
+| **Archivo** | `docs/auxiliares/tags_project.csv` |
+| **Grupos** | 10 grupos de clasificación |
+| **Etiquetas totales** | 29 (etiquetas principales + subtags de granularidad) |
+| **Columna clave** | `Categoria_Journal` — mapeo etiqueta → categoría Logseq |
+
+## Columna Categoria_Journal
+
+La columna `Categoria_Journal` es el puente entre el correo y el grafo. Sus valores posibles son las cinco categorías estándar del journal:
+
+| Valor en Categoria_Journal | Categoría en el diario |
+|---|---|
+| `[[Prueba Piloto]]` | Rondas EA, confirmaciones, logística |
+| `[[Gestión Administrativa]]` | Comunicaciones, contratos, finanzas |
+| `[[Desarrollo Técnico]]` | CALAIRE-APP, calibración, documentación técnica |
+| `[[Infraestructura]]` | TI, instalaciones, transporte de equipos |
+| `[[SGC / Calidad]]` | Auditorías, procedimientos ISO, acreditación |
+
+## Los 10 grupos de clasificación
+
+<AccordionGroup>
+
+  <Accordion title="Grupo 1 — Acción Requerida">
+    Correos que exigen una respuesta o decisión del líder de proyecto para desbloquear una tarea.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `[ACCION] Aprobación` | Solicitudes de validación formal (presupuesto, diseño, visto bueno) | `[[Gestión Administrativa]]` |
+    | `[ACCION] Decisión` | Registro de una decisión importante tomada y comunicada | `[[Gestión Administrativa]]` |
+  </Accordion>
+
+  <Accordion title="Grupo 2 — Gestión Financiera">
+    Documentos relacionados con costos, contratos, facturas y presupuestos del proyecto.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `Finanzas - Cotización` | Propuestas de costos y estimaciones de proveedores | `[[Gestión Administrativa]]` |
+    | `Finanzas - Contratación` | Contratos, acuerdos, órdenes de compra | `[[Gestión Administrativa]]` |
+    | `Finanzas - Factura/Cobro` | Facturas recibidas o enviadas, comprobantes de pago | `[[Gestión Administrativa]]` |
+    | `Finanzas - Cotización - Equipos` | Subtag: cotizaciones específicas de equipos de medición | `[[Gestión Administrativa]]` |
+    | `Finanzas - Contratación - Servicio` | Subtag: contratos de prestación de servicios (consultorías) | `[[Gestión Administrativa]]` |
+  </Accordion>
+
+  <Accordion title="Grupo 3 — Seguimiento y Entregas">
+    Envío o recepción de productos, informes de avance y alertas de riesgo del proyecto.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `[[Seguimiento - Entregable]]` | Envío/recepción de hitos o documentos finales | `[[Prueba Piloto]]` |
+    | `[[Seguimiento - Report]]` | Informes de avance y dashboards de métricas | `[[Prueba Piloto]]` |
+    | `[[Seguimiento - Riesgo/Problema]]` | Alertas de riesgos u obstáculos activos | `[[Prueba Piloto]]` |
+    | `[[Seguimiento - Entregable - Técnico]]` | Subtag: informes técnicos, protocolos, resultados de rondas EA | `[[Prueba Piloto]]` |
+    | `Seguimiento - Entregable - Administrativo` | Subtag: informes de gestión, reportes a Corantioquia | `[[Gestión Administrativa]]` |
+  </Accordion>
+
+  <Accordion title="Grupo 4 — Comunicaciones">
+    Reuniones internas, reuniones externas y comunicados a interesados del proyecto.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `[[Reunión - Interna]]` | Convocatorias, agendas y minutas del equipo directo | `[[Prueba Piloto]]` |
+    | `Reunión - Externa` | Reuniones con clientes, proveedores o stakeholders externos | `[[Gestión Administrativa]]` |
+    | `Comunicado - Stakeholders` | Anuncios formales y boletines a interesados clave | `[[Gestión Administrativa]]` |
+  </Accordion>
+
+  <Accordion title="Grupo 5 — Referencia">
+    Documentos de consulta, solicitudes de información y apuntes de contexto que no requieren acción.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `Referencia - Notas` | Apuntes informales, minutas de llamadas, ideas de brainstorming | `[[Desarrollo Técnico]]` |
+    | `Referencia - Solicitud Info` | Correos donde se solicita información a terceros, pendiente de respuesta | `[[Desarrollo Técnico]]` |
+    | `Referencia - Documentación` | Manuales técnicos, guías, especificaciones de consulta | `[[Desarrollo Técnico]]` |
+  </Accordion>
+
+  <Accordion title="Grupo 6 — Otros">
+    Eventos de calendario y notificaciones de reuniones de Google Meet.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `CALENDAR` | Invitaciones de calendario, notificaciones de Meet | `[[Gestión Administrativa]]` |
+  </Accordion>
+
+  <Accordion title="Grupo 7 — Operación Técnica">
+    Comunicaciones sobre la ejecución de rondas piloto, calibración y desarrollo del aplicativo CALAIRE-APP.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `[[TECH] Ronda Piloto]` | Ejecución de rondas EA, confirmaciones de laboratorios, logística de analizadores | `[[Prueba Piloto]]` |
+    | `[[TECH] Ronda - Confirmación Lab]` | Subtag: respuestas de laboratorios confirmando o declinando participación | `[[Prueba Piloto]]` |
+    | `[[TECH] Ronda - Equipos]` | Subtag: logística de transporte y recepción de analizadores (CO, NOx, SO2, O3) | `[[Infraestructura]]` |
+    | `[TECH] Calibración` | Calibración de equipos, validación de métodos, certificados metrológicos | `[[Desarrollo Técnico]]` |
+    | `[TECH] Desarrollo App` | CALAIRE-APP: requerimientos, bugs, validación estadística | `[[Desarrollo Técnico]]` |
+  </Accordion>
+
+  <Accordion title="Grupo 8 — Calidad / SGC">
+    Comunicaciones del Sistema de Gestión de Calidad: auditorías, procedimientos e interacciones con organismos de acreditación.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `[SGC] Auditoría` | Notificaciones de auditorías internas o externas, hallazgos, acciones correctivas | `[[SGC / Calidad]]` |
+    | `[SGC] Procedimiento` | Revisión, aprobación o distribución de procedimientos del SGC | `[[SGC / Calidad]]` |
+    | `[SGC] Acreditación` | Comunicaciones con ONAC, requisitos de competencia técnica | `[[SGC / Calidad]]` |
+  </Accordion>
+
+  <Accordion title="Grupo 9 — Infraestructura">
+    Gestión de recursos tecnológicos, espacio físico y logística de transporte de equipos.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `[INFRA] TI` | Equipos de cómputo, software, licencias, soporte técnico | `[[Infraestructura]]` |
+    | `[INFRA] Instalaciones` | Espacio físico, laboratorio, almacenamiento, adecuaciones | `[[Infraestructura]]` |
+    | `[INFRA] Transporte` | Logística de transporte de equipos, mensajería, envíos | `[[Infraestructura]]` |
+  </Accordion>
+
+  <Accordion title="Grupo 10 — Actividades Transversales">
+    Capacitaciones, talleres, socializaciones y participación en eventos externos de metrología y calidad del aire.
+
+    | Etiqueta sugerida | Descripción | Categoria_Journal |
+    |---|---|---|
+    | `[EVENTO] Capacitación` | Invitaciones, materiales y seguimiento de capacitaciones técnicas | `[[Desarrollo Técnico]]` |
+    | `[[EVENTO] Taller]` | Talleres prácticos, sesiones de trabajo colaborativo con laboratorios | `[[Prueba Piloto]]` |
+    | `[EVENTO] Socialización` | Presentaciones formales del proyecto a stakeholders, webinars | `[[Gestión Administrativa]]` |
+    | `[EVENTO] Congreso/Evento` | Participación en congresos y eventos externos de metrología | `[[Gestión Administrativa]]` |
+  </Accordion>
+
+</AccordionGroup>
+
+## Flujo de clasificación en Gmail
+
+El proceso de clasificación conecta el correo entrante con el registro en el grafo Logseq en tres pasos:
+
+<Steps>
+  <Step title="Recibir el correo en Gmail">
+    Identificar el correo como relevante para CALAIRE-EA. Revisar remitente, asunto y contenido para determinar el grupo temático.
+  </Step>
+  <Step title="Aplicar la etiqueta correspondiente">
+    Asignar la etiqueta del grupo que mejor describa el contenido del correo. Para mayor granularidad, aplicar también el subtag correspondiente. Consultar `docs/auxiliares/tags_project.csv` para verificar el mapeo.
+  </Step>
+  <Step title="Registrar en el grafo Logseq">
+    Con base en la columna `Categoria_Journal` de la etiqueta aplicada, crear o actualizar el bloque de evento en la sección temática correspondiente del diario del día.
+  </Step>
+</Steps>
+
+<Note>
+La regla uno a uno garantiza que no exista ambigüedad: si un correo tiene la etiqueta `[TECH] Ronda - Equipos`, el evento siempre se registra bajo la categoría `[[Infraestructura]]` en el diario, no en otra sección.
+</Note>

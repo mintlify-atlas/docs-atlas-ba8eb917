@@ -1,0 +1,194 @@
+---
+title: "Preguntas frecuentes sobre el uso del grafo CALAIRE-EA"
+description: "Respuestas a las dudas más comunes sobre el grafo Logseq, tareas, templates, clasificación de correos y operaciones habituales del proyecto."
+---
+
+Esta página reúne las preguntas más frecuentes sobre el uso del grafo CALAIRE-EA en Logseq, abarcando desde la organización de archivos y la creación de tareas hasta el uso de templates y la integración con Gmail. Las respuestas incluyen ejemplos de sintaxis listos para copiar.
+
+<AccordionGroup>
+
+  <Accordion title="¿Cuál es la diferencia entre pages/ y journals/?">
+    Los directorios tienen propósitos distintos y no son intercambiables:
+
+    | Directorio | Tipo de contenido | Formato de nombre |
+    |---|---|---|
+    | `pages/` | Notas permanentes, MOCs, templates, páginas de laboratorios y equipos | Title Case con espacios (`Prueba Piloto.md`) |
+    | `journals/` | Entradas diarias de bitácora de trabajo | `YYYY_MM_DD.md` (ej. `2026_03_15.md`) |
+
+    Las páginas en `pages/` son referencias estables que se enlazan desde múltiples lugares del grafo. Los journals son registros cronológicos que documentan eventos del día y contienen las tareas, decisiones y entradas de diario con sus propiedades de bloque.
+  </Accordion>
+
+  <Accordion title="¿Cómo agrego un laboratorio nuevo al registro?">
+    Sigue estos cuatro pasos para incorporar un laboratorio participante al grafo:
+
+    <Steps>
+      <Step title="Crear la página del laboratorio">
+        Crea un archivo en `pages/` con el formato Title Case: `Nombre del Laboratorio.md`. Consulta la estructura estándar en `ref/setup.md`, sección "Estructura de Páginas de Laboratorios".
+      </Step>
+      <Step title="Agregar al MOC de laboratorios">
+        Abre `pages/Laboratorios.md` y agrega el enlace al nuevo laboratorio bajo la sección de estatus correspondiente (`#confirmado`, `#contactado` o `#candidato`).
+      </Step>
+      <Step title="Actualizar Prueba Piloto">
+        Si el laboratorio participa en alguna ronda, actualiza `pages/Prueba Piloto.md` con el enlace y el estado de participación.
+      </Step>
+      <Step title="Registrar en el diario">
+        Agrega un bloque de evento en el diario del día bajo la sección `Gestión de Participantes Prueba Piloto` o `Prospectación de Laboratorios` con las propiedades `date::`, `category::` y `status::`.
+      </Step>
+    </Steps>
+  </Accordion>
+
+  <Accordion title="¿Cómo creo una tarea que aparezca en las consultas?">
+    Para que una tarea aparezca en la consulta `📋 CALAIRE-EA Tasks` del pie del diario, debe incluir `project:: [[CALAIRE-EA]]`. La sintaxis completa es:
+
+    ```markdown
+    - TODO Descripción de la tarea
+      project:: [[CALAIRE-EA]]
+      deadline:: 2026-03-15
+      priority:: A
+    ```
+
+    La tarea debe estar ubicada **dentro de una sección temática** del diario (no suelta al final). Cuando la tarea está en progreso, cambiar el prefijo de `TODO` a `DOING`. Al completarla, cambiar a `DONE`.
+
+    <Tip>
+    Usa `priority:: A` para tareas críticas. Las consultas de Logseq pueden filtrarse por prioridad para identificar los elementos más urgentes del proyecto.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="¿Por qué debo usar tabuladores y no espacios para indentación?">
+    Logseq interpreta la jerarquía de bloques exclusivamente mediante **tabuladores**. Si se usan espacios, Logseq no reconoce la relación padre-hijo entre bloques y las propiedades de bloque quedan desvinculadas de su bloque padre.
+
+    ```markdown
+    ✓ Correcto (tabuladores)
+    - Bloque padre
+    	- Bloque hijo
+    	  property:: value
+
+    ✗ Incorrecto (espacios)
+    - Bloque padre
+      - Bloque hijo
+        property:: value
+    ```
+
+    Este error es difícil de detectar visualmente porque tabuladores y espacios se ven iguales en muchos editores. Al editar archivos del grafo fuera de Logseq (en VS Code u otro editor), configurar el editor para insertar tabuladores en lugar de espacios en archivos `.md`.
+  </Accordion>
+
+  <Accordion title="¿Cómo ejecuto el exportador de tareas?">
+    El grafo incluye el script `tools/export_tareas.py` que extrae todos los bloques `TODO`/`DOING`/`DONE` de `pages/` y `journals/` y genera un CSV ordenado por deadline. Solo requiere Python 3 (sin dependencias externas):
+
+    ```bash
+    python tools/export_tareas.py
+    ```
+
+    Opciones adicionales:
+
+    ```bash
+    python tools/export_tareas.py --output mis_tareas.csv
+    python tools/export_tareas.py --pages pages/ --journals journals/
+    ```
+
+    El archivo resultante (`tareas_calaire.csv` por defecto) puede importarse directamente a Google Sheets. Consulta [Exportar tareas de Logseq a CSV](/herramientas/export-tareas) para la documentación completa del script y [Alertas automáticas de tareas en Google Sheets](/herramientas/alertas-google-sheets) para configurar notificaciones por email.
+  </Accordion>
+
+  <Accordion title="¿Cómo aplico un template en Logseq?">
+    Los templates se insertan con el comando `/template`:
+
+    <Steps>
+      <Step title="Posicionarse en el bloque de destino">
+        Crear un bloque vacío en la página o diario donde se quiere insertar el template.
+      </Step>
+      <Step title="Escribir el comando">
+        Escribir `/template` en el bloque. Aparece un selector con todos los templates disponibles.
+      </Step>
+      <Step title="Seleccionar el template">
+        Escribir el nombre del template para filtrar (`journal-daily`, `reunion`, `protocolo`, `ronda-piloto`, `entregable`) y presionar Enter para insertar.
+      </Step>
+      <Step title="Completar las propiedades">
+        Rellenar todas las propiedades vacías del template antes de guardar el archivo.
+      </Step>
+    </Steps>
+
+    Los templates disponibles y su estructura completa están documentados en la página [Templates del grafo](/referencia/templates).
+  </Accordion>
+
+  <Accordion title="¿Qué significa el flujo TODO → DOING → DONE?">
+    Es el sistema de seguimiento de tareas configurado en `logseq/config.edn` con `:preferred-workflow :todo`. Los tres estados tienen significados precisos:
+
+    | Estado | Significado | Cuándo usarlo |
+    |---|---|---|
+    | `TODO` | Tarea identificada, pendiente de inicio | Al crear una nueva tarea |
+    | `DOING` | Tarea en ejecución activa | Cuando se empieza a trabajar en ella |
+    | `DONE` | Tarea completada y documentada | Al finalizar y verificar la tarea |
+
+    En Logseq, hacer clic en el marcador de estado de un bloque de tarea lo hace avanzar al siguiente estado. También se puede cambiar manualmente editando el prefijo del bloque.
+  </Accordion>
+
+  <Accordion title="¿Cómo creo una nota de reunión?">
+    El proceso estándar para documentar una reunión en el grafo es:
+
+    1. En el diario del día, crear un bloque con el enlace a la página de reunión:
+       ```markdown
+       - [[Reunión: Tema de la Reunión]]
+       ```
+    2. Hacer clic en el enlace para navegar a la nueva página creada.
+    3. Aplicar el template `reunion` con el comando `/template reunion`.
+    4. Completar las propiedades `attendees::` y `date::`.
+    5. Documentar temas discutidos, decisiones (`#decision`) y acciones (`TODO`) en las secciones correspondientes.
+
+    ```markdown
+    - #[[Reunión]]
+      type:: [[Meeting]]
+      attendees:: David, César, Rafael
+      project:: [[CALAIRE-EA]]
+      date:: 2026-03-15
+      - **Temas Discutidos**
+        - Revisión de resultados Ronda 3
+      - **Decisiones**
+        - #decision Se aprueba el protocolo de CO v2.0
+      - **Acciones**
+        - TODO Actualizar documentación de protocolo CO
+          project:: [[CALAIRE-EA]]
+          deadline:: 2026-03-22
+    ```
+  </Accordion>
+
+  <Accordion title="¿Cómo creo un artefacto PMI?">
+    Los artefactos de gestión de proyectos PMI se crean en el directorio `docs/pm/`. El proceso es:
+
+    1. Consultar la guía de referencia correspondiente en `docs/instrucciones/` (ej. `guide_pm_charter.md` para el Project Charter).
+    2. Crear el archivo en `docs/pm/` con la numeración estándar:
+       ```
+       01_Project_Charter.md
+       02_Registro_Interesados.md
+       03_EDT_WBS.md
+       ...
+       10_Lecciones_Aprendidas.md
+       ```
+    3. Seguir la estructura definida en la guía de referencia.
+    4. Enlazar el artefacto desde el MOC `[[Gestión del Proyecto]]` en `pages/`.
+
+    <Warning>
+    No crear artefactos PMI en `pages/` ni en `docs/instrucciones/`. La carpeta `docs/pm/` es exclusiva para los artefactos finales; `docs/instrucciones/` contiene únicamente las guías de cómo elaborarlos.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="¿Cuál es la diferencia entre un MOC y una página regular?">
+    Un MOC (Map of Content) es una página cuyo propósito principal es **agregar enlaces** a otras páginas relacionadas, sirviendo como punto de entrada temático al grafo. Una página regular documenta un tema específico en profundidad.
+
+    | Tipo | Propósito | Ejemplos |
+    |---|---|---|
+    | **MOC** | Agrupa y enlaza páginas relacionadas; punto de entrada temático | `[[CALAIRE-EA]]`, `[[Prueba Piloto]]`, `[[Laboratorios]]`, `[[QMS]]` |
+    | **Página regular** | Documenta un tema, entidad o evento específico | `[[SIATA]]`, `[[Ronda 3]]`, `[[Protocolo CO v2.0]]` |
+
+    Los MOCs se identifican con la etiqueta `#MOC` y se listan en la sección "MOCs Principales" del `README.md`. Toda página nueva debe enlazarse desde al menos un MOC existente para ser accesible en la navegación del grafo.
+
+    ```markdown
+    - tags:: #MOC
+    - # CALAIRE-EA
+    - ## Laboratorios
+      - [[SIATA]]
+      - [[Universidad de Medellín]]
+      - [[Universidad Pontificia Bolivariana]]
+    ```
+  </Accordion>
+
+</AccordionGroup>

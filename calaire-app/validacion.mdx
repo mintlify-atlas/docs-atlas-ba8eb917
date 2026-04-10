@@ -1,0 +1,82 @@
+---
+title: "Validación técnica de CALAIRE-APP por César Yate"
+description: "Proceso de validación técnica de CALAIRE-APP por César Yate (ISO 17043), hallazgos del análisis comparativo, estado por módulo y tareas pendientes."
+---
+
+La validación técnica de CALAIRE-APP fue realizada por César Yate, consultor especialista en ensayos de aptitud con énfasis en ISO 17043. El proceso consistió en un análisis comparativo entre los resultados calculados por el aplicativo y una verificación manual independiente de las mismas operaciones estadísticas. El primer reporte de validación fue remitido el 7 de febrero de 2026.
+
+## Hallazgo principal
+
+<Check>
+**El aplicativo CALAIRE-APP funciona correctamente.** El análisis comparativo confirmó que los cálculos de preprocesamiento, homogeneidad, estabilidad, nIQR y MADe son correctos conforme a ISO 13528:2017.
+</Check>
+
+<Info>
+Las discrepancias detectadas inicialmente en la comparación de resultados fueron atribuidas a un **error de imputación de datos cometido por César Yate durante la verificación manual**, no a un defecto del aplicativo. El aplicativo procesó los datos de entrada originales de forma correcta en todos los módulos evaluados.
+</Info>
+
+Este hallazgo tiene implicaciones directas para el cronograma: el informe de validación puede avanzar hacia su cierre formal una vez que se completen las verificaciones de los módulos pendientes (incertidumbre, Algoritmo A, compatibilidad metrológica y puntuaciones de desempeño).
+
+## Estado de validación por módulo
+
+La siguiente tabla resume el estado actual de cada módulo del aplicativo según los resultados del proceso de validación.
+
+| Módulo | Resultado de validación | Observaciones |
+|---|---|---|
+| Preprocesamiento | Validado ✅ | Sin discrepancias. Manejo correcto de datos faltantes. |
+| Homogeneidad | Validado ✅ | Cálculo ANOVA conforme a ISO 13528 Anexo B. |
+| Estabilidad | Validado ✅ | Regresión lineal conforme a ISO 13528 Anexo C. |
+| nIQR | Validado ✅ | Factor de normalización (1.3490) aplicado correctamente. |
+| MADe | Validado ✅ | Factor de consistencia (1.4826) aplicado correctamente. |
+| Incertidumbre (u_bb, u_ts) | En revisión ⏳ | Pendiente verificación de propagación de incertidumbre. |
+| Algoritmo A | En revisión ⏳ | Pendiente verificación de convergencia en datos piloto. |
+| Compatibilidad metrológica | En revisión ⏳ | Pendiente integración de incertidumbre del participante. |
+| Puntuación z | En revisión ⏳ | Pendiente verificación con datos de rondas simuladas. |
+| Puntuación z' | En revisión ⏳ | Pendiente verificación con datos de rondas simuladas. |
+| Puntuación zeta | En revisión ⏳ | Pendiente verificación con datos de rondas simuladas. |
+| Puntuación En | En revisión ⏳ | Pendiente manejo de casos sin incertidumbre reportada. |
+
+## Módulos validados
+
+<Check>Preprocesamiento: lectura de datos, manejo de valores faltantes y estandarización de unidades verificados.</Check>
+<Check>Homogeneidad: análisis ANOVA y criterio de aceptación conforme a ISO 13528:2017 Anexo B verificados.</Check>
+<Check>Estabilidad: regresión lineal y criterio de aceptación conforme a ISO 13528:2017 Anexo C verificados.</Check>
+<Check>nIQR: cálculo del rango intercuartílico normalizado con factor 1.3490 verificado.</Check>
+<Check>MADe: cálculo del estimador MAD escalado con factor 1.4826 verificado.</Check>
+
+## Módulos pendientes de revisión
+
+<Warning>
+Los módulos de incertidumbre (u_bb, u_ts), Algoritmo A, compatibilidad metrológica y las cuatro puntuaciones de desempeño (z, z', zeta, En) requieren completar su validación antes de ser empleados en producción o para reportar resultados a participantes.
+</Warning>
+
+La estrategia para completar la validación de estos módulos incluye:
+
+<Steps>
+  <Step title="Testing con datos simulados (Rondas 1–4)">
+    Ejecutar el aplicativo sobre conjuntos de datos simulados que representen las condiciones esperadas de las rondas piloto (CO, NOx, SO₂, O₃). Fecha límite: **2026-02-15**.
+  </Step>
+  <Step title="Enviar informe de hallazgos a César Yate">
+    Remitir al consultor el informe formal de hallazgos de la validación, incluyendo los resultados del testing con datos simulados y la descripción técnica del error de imputación identificado. Fecha límite: **2026-02-15**.
+  </Step>
+  <Step title="Completar informe de validación">
+    Consolidar el informe técnico de validación con el estado definitivo de todos los módulos, firmado por el especialista César Yate. Fecha límite: **2026-02-20**.
+  </Step>
+</Steps>
+
+## Backlog de tareas de validación y cierre
+
+Las siguientes tareas están activas en el backlog del proyecto CALAIRE-APP con sus fechas límite y prioridades.
+
+| Tarea | Fecha límite | Prioridad |
+|---|---|---|
+| Informe de estabilidad y homogeneidad (DOCX + preview HTML) | 2026-02-12 | Alta |
+| Testing con datos simulados (Rondas 1–4) | 2026-02-15 | Alta |
+| Enviar informe de hallazgos a César Yate | 2026-02-15 | Alta |
+| Documentación de uso para participantes | 2026-02-18 | Media |
+| Completar informe de validación | 2026-02-20 | Alta |
+| Migrar repositorio a GitHub del grupo | Sin fecha definida | Media |
+
+<Note>
+El cierre contractual del desarrollo de CALAIRE-APP ocurrió en diciembre de 2025. Las tareas del backlog corresponden a actividades de validación, documentación y transferencia que se extienden al primer trimestre de 2026 bajo el Contrato 2 de Wilson Salas.
+</Note>
